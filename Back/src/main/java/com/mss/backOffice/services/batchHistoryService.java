@@ -1,5 +1,6 @@
 package com.mss.backOffice.services;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -96,7 +97,7 @@ public class batchHistoryService {
         // Set execution-specific data from BatchesFC
         history.setBatchHStartDate(batch.getBatchDate());
         history.setBatchHEndDate(batch.getBatchEndDate());
-        history.setStatus(batch.getBatchStatus());
+        history.setStatus(0); // Default status: 0 (pending)
         history.setErreur(batch.getError());
         history.setException(batch.getErrorStackTrace());
         history.setBypassStatus(0); // Default bypass status
@@ -154,31 +155,36 @@ public class batchHistoryService {
         });
     }
     /**
-     * Returns the list of BatchesFC from the last done batch (latest in history)
-     * up to yesterday (exclusive).
-     * Example: If today is 15th and the latest batch done was on 12th,
-     * returns batches from 13th to 14th (inclusive).
+     * Returns the list of BatchesFC from the last done batch (batchStatus=1)
+     * up to yesterday (excluding today's batches).
+     * Logic:
+     * 1. Find the last batch in BatchesFC where batchStatus = 1 (done)
+     * 2. Get all batches where batchLastExecution is AFTER that batch's batchLastExecution
+     * 3. Exclude batches from today (only include up to yesterday)
      */
     public List<BatchesFC> getPendingBatchesSinceLastDone() {
-        // Get the latest batch history record
-        BatchesHistory latestHistory = batchesHistoryRepository.findAll().stream()
-            .max((h1, h2) -> h1.getBatchLastExecution().compareTo(h2.getBatchLastExecution()))
-            .orElse(null);
-
+        // Step 1: Find the last done batch (batchStatus = 1) from BatchesFC table
+        List<BatchesFC> doneBatches = batchesFCRepository.findLastDoneBatch();
+        
         Date startDate;
-        if (latestHistory != null && latestHistory.getBatchLastExecution() != null) {
-            // Start from the day after the last done batch
-            startDate = new Date(latestHistory.getBatchLastExecution().getTime() + 24 * 60 * 60 * 1000);
+        if (doneBatches != null && !doneBatches.isEmpty()) {
+            // Get the first one (most recent done batch by batchLastExecution)
+            BatchesFC lastDoneBatch = doneBatches.get(0);
+            startDate = lastDoneBatch.getBatchLastExcution();
         } else {
-            // If no history, start from the earliest possible
+            // If no done batch found, start from the earliest possible
             startDate = new Date(0);
         }
 
-        // End at yesterday
-        Date today = new Date();
-        Date endDate = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+        // Step 2: Calculate start of today (midnight)
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        Date startOfToday = calendar.getTime();
 
-        // Query batches between startDate and endDate
-        return batchesFCRepository.findBatchesBetweenDates(startDate, endDate);
+        // Step 3: Get all batches after the last done batch but before today
+        return batchesFCRepository.findBatchesAfterDateUntilYesterday(startDate, startOfToday);
     }
 }
