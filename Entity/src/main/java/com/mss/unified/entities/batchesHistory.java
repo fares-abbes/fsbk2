@@ -1,10 +1,13 @@
 package com.mss.unified.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "BATCHES_HISTORY", schema = "FRANSABANK")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class BatchesHistory {
 
     @Id
@@ -22,6 +25,7 @@ public class BatchesHistory {
        ======================== */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BATCH_ID", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private BatchesFC batch;
 
     /* ========================
