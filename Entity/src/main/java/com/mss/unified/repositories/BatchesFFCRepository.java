@@ -33,5 +33,7 @@ public interface BatchesFFCRepository extends JpaRepository<BatchesFC, Integer> 
     @Modifying
     @Query("update BatchesFC u set u.batchStatus =:status, u.error=:error,u.batchEndDate=:last, u.errorStackTrace=:errorStackTrace where u.key =:key")
     void updateStatusAndErrorBatch(String key,Integer status,String error,Date last,String errorStackTrace);
+    @Query("SELECT b FROM BatchesFC b WHERE b.batchDate >= :startDate AND b.batchDate < :endDate ORDER BY b.batchDate ASC")
+    List<BatchesFC> findBatchesBetweenDates(Date startDate, Date endDate);
 
 }

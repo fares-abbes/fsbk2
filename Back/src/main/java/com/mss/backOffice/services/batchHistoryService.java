@@ -153,4 +153,32 @@ public class batchHistoryService {
             logger.info("Updated bypass status to {} for history ID: {}", bypassStatus, historyId);
         });
     }
+    /**
+     * Returns the list of BatchesFC from the last done batch (latest in history)
+     * up to yesterday (exclusive).
+     * Example: If today is 15th and the latest batch done was on 12th,
+     * returns batches from 13th to 14th (inclusive).
+     */
+    public List<BatchesFC> getPendingBatchesSinceLastDone() {
+        // Get the latest batch history record
+        BatchesHistory latestHistory = batchesHistoryRepository.findAll().stream()
+            .max((h1, h2) -> h1.getBatchLastExecution().compareTo(h2.getBatchLastExecution()))
+            .orElse(null);
+
+        Date startDate;
+        if (latestHistory != null && latestHistory.getBatchLastExecution() != null) {
+            // Start from the day after the last done batch
+            startDate = new Date(latestHistory.getBatchLastExecution().getTime() + 24 * 60 * 60 * 1000);
+        } else {
+            // If no history, start from the earliest possible
+            startDate = new Date(0);
+        }
+
+        // End at yesterday
+        Date today = new Date();
+        Date endDate = new Date(today.getTime() - 24 * 60 * 60 * 1000);
+
+        // Query batches between startDate and endDate
+        return batchesFCRepository.findBatchesBetweenDates(startDate, endDate);
+    }
 }
