@@ -1,5 +1,6 @@
 package com.mss.unified.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -25,7 +26,7 @@ public class BatchesHistory {
        ======================== */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BATCH_ID", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     private BatchesFC batch;
 
     /* ========================
