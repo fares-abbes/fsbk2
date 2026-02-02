@@ -1,17 +1,38 @@
 import { Component, OnDestroy } from '@angular/core';
-import { StatusBadge } from '../components/status-badge';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'primeng/tabs';
+import { TooltipModule } from 'primeng/tooltip';
+import { DatePickerModule } from 'primeng/datepicker';
+import { CardModule } from 'primeng/card';
 import { AccountingRow, FileExchangeRow, MatchingRow, Status } from '../types';
-
-type TabKey = 'matching' | 'accounting' | 'deletion';
 
 @Component({
   selector: 'app-matching-page',
-  imports: [StatusBadge],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TableModule,
+    ButtonModule,
+    TagModule,
+    Tabs,
+    TabList,
+    Tab,
+    TabPanels,
+    TabPanel,
+    TooltipModule,
+    DatePickerModule,
+    CardModule
+  ],
   templateUrl: './matching.html',
   styleUrl: './matching.css'
 })
 export class MatchingPage implements OnDestroy {
-  protected activeTab: TabKey = 'matching';
+  protected activeTabIndex: number = 0;
+  protected selectedClearDate: Date | null = null;
 
   protected matchingRows: MatchingRow[] = [
     {
@@ -124,8 +145,32 @@ export class MatchingPage implements OnDestroy {
     this.timers.clear();
   }
 
-  protected setTab(tab: TabKey): void {
-    this.activeTab = tab;
+  protected getStatusSeverity(status: Status): 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' {
+    const severityMap: Record<Status, 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast'> = {
+      'Done': 'success',
+      'Pending': 'secondary',
+      'Validating': 'info',
+      'Error': 'danger'
+    };
+    return severityMap[status];
+  }
+
+  protected getStatusIcon(status: Status): string {
+    const iconMap: Record<Status, string> = {
+      'Done': 'pi pi-check-circle',
+      'Pending': 'pi pi-clock',
+      'Validating': 'pi pi-spin pi-spinner',
+      'Error': 'pi pi-times-circle'
+    };
+    return iconMap[status];
+  }
+
+  protected getActionSeverity(action: 'Send' | 'Get'): 'warn' | 'info' {
+    return action === 'Send' ? 'warn' : 'info';
+  }
+
+  protected getActionIcon(action: 'Send' | 'Get'): string {
+    return action === 'Send' ? 'pi pi-upload' : 'pi pi-download';
   }
 
   protected onRunMatching(row: MatchingRow): void {
@@ -170,11 +215,11 @@ export class MatchingPage implements OnDestroy {
     this.runAccountingBatch(this.mouvementRows);
   }
 
-  protected onClearDateChange(value: string): void {
-    if (!value) {
+  protected onClearData(): void {
+    if (!this.selectedClearDate) {
       return;
     }
-    alert(`Selected date: ${value}`);
+    console.log('Clear data for date:', this.selectedClearDate);
   }
 
   private runAccountingBatch(rows: AccountingRow[]): void {

@@ -1,183 +1,354 @@
 <div class="page-container">
-  <h1 class="page-title">Matching &amp; Accounting</h1>
-
-  <div class="tabs">
-    <button
-      class="tab"
-      type="button"
-      [class.active]="activeTab === 'matching'"
-      (click)="setTab('matching')"
-    >
-      Matching
-    </button>
-    <button
-      class="tab"
-      type="button"
-      [class.active]="activeTab === 'accounting'"
-      (click)="setTab('accounting')"
-    >
-      Écriture Comptable
-    </button>
-    <button
-      class="tab"
-      type="button"
-      [class.active]="activeTab === 'deletion'"
-      (click)="setTab('deletion')"
-    >
-      Suppression
-    </button>
+  <!-- Page Header -->
+  <div class="page-header-section">
+    <h1 class="page-title">Matching & Accounting</h1>
+    <p class="page-subtitle">Process transaction matching, generate accounting entries, and manage data cleanup</p>
   </div>
 
-  @if (activeTab === 'matching') {
-    <section class="rectangle">
-      <h2 class="rectangle-title">Matching</h2>
+  <!-- Stats Overview -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon primary">
+        <i class="pi pi-sync"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ matchingRows.length }}</span>
+        <span class="stat-label">Matching Processes</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon success">
+        <i class="pi pi-check"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">1</span>
+        <span class="stat-label">Completed Today</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon info">
+        <i class="pi pi-exchange"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ fileExchangeRows.length }}</span>
+        <span class="stat-label">Exchange Actions</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon warning">
+        <i class="pi pi-book"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ dayOpRows.length + mouvementRows.length }}</span>
+        <span class="stat-label">Accounting Entries</span>
+      </div>
+    </div>
+  </div>
 
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Process</th>
-              <th>Status</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (row of matchingRows; track row.name) {
+  <!-- Tab View -->
+  <p-tabs [(value)]="activeTabIndex" styleClass="modern-tabview">
+    <p-tablist>
+      <p-tab [value]="0">
+        <i class="pi pi-sync tab-icon"></i>
+        <span>Matching</span>
+      </p-tab>
+      <p-tab [value]="1">
+        <i class="pi pi-book tab-icon"></i>
+        <span>Écriture Comptable</span>
+      </p-tab>
+      <p-tab [value]="2">
+        <i class="pi pi-trash tab-icon"></i>
+        <span>Suppression</span>
+      </p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+      <!-- Matching Tab -->
+      <p-tabpanel [value]="0">
+        <div class="tab-content">
+        <!-- Matching Processes Card -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title-wrapper">
+              <h2 class="card-title">
+                <span class="card-title-icon"><i class="pi pi-sync"></i></span>
+                Transaction Matching
+              </h2>
+              <p class="card-description">Match incoming transactions with bank records</p>
+            </div>
+          </div>
+
+          <p-table 
+            [value]="matchingRows" 
+            [tableStyle]="{ 'min-width': '50rem' }"
+            styleClass="p-datatable-sm"
+            [rowHover]="true"
+          >
+            <ng-template pTemplate="header">
               <tr>
-                <td>{{ row.name }}</td>
-                <td><app-status-badge [status]="row.status" /></td>
-                <td>{{ row.startDate }}</td>
-                <td>{{ row.endDate }}</td>
+                <th>Process</th>
+                <th>Status</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th style="width: 140px">Actions</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+              <tr>
                 <td>
-                  <button
-                    class="btn-primary btn-small"
-                    type="button"
+                  <div class="process-name">
+                    <i class="pi pi-cog"></i>
+                    <span>{{ row.name }}</span>
+                  </div>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="row.status" 
+                    [severity]="getStatusSeverity(row.status)"
+                    [icon]="getStatusIcon(row.status)"
+                  />
+                </td>
+                <td class="date-cell">{{ row.startDate }}</td>
+                <td class="date-cell">{{ row.endDate }}</td>
+                <td>
+                  <p-button 
+                    icon="pi pi-play" 
+                    label="Match" 
+                    severity="success"
+                    size="small"
                     [disabled]="isMatchingDisabled(row)"
-                    (click)="onRunMatching(row)"
-                  >
-                    Match
-                  </button>
+                    (onClick)="onRunMatching(row)"
+                    pTooltip="Run matching process"
+                  />
                 </td>
               </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </section>
+            </ng-template>
+          </p-table>
+        </section>
 
-    <section class="rectangle">
-      <h2 class="rectangle-title">Batch Exchange Actions</h2>
+        <!-- Batch Exchange Card -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title-wrapper">
+              <h2 class="card-title">
+                <span class="card-title-icon"><i class="pi pi-exchange"></i></span>
+                Batch Exchange Actions
+              </h2>
+              <p class="card-description">Send and receive batch files for processing</p>
+            </div>
+          </div>
 
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Action</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (row of fileExchangeRows; track row.name) {
+          <p-table 
+            [value]="fileExchangeRows" 
+            [tableStyle]="{ 'min-width': '50rem' }"
+            styleClass="p-datatable-sm"
+            [rowHover]="true"
+          >
+            <ng-template pTemplate="header">
               <tr>
-                <td>{{ row.name }}</td>
-                <td>{{ row.startDate }}</td>
-                <td>{{ row.endDate }}</td>
+                <th>Action Name</th>
+                <th>Type</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th style="width: 140px">Actions</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+              <tr>
                 <td>
-                  <button class="btn-warning btn-small" type="button" (click)="onRunExchange(row)">
-                    {{ row.action }}
-                  </button>
+                  <div class="process-name">
+                    <i [class]="getActionIcon(row.action)"></i>
+                    <span>{{ row.name }}</span>
+                  </div>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="row.action" 
+                    [severity]="getActionSeverity(row.action)"
+                    [icon]="getActionIcon(row.action)"
+                  />
+                </td>
+                <td class="date-cell">{{ row.startDate }}</td>
+                <td class="date-cell">{{ row.endDate }}</td>
+                <td>
+                  <p-button 
+                    [icon]="getActionIcon(row.action)" 
+                    [label]="row.action" 
+                    [severity]="getActionSeverity(row.action)"
+                    size="small"
+                    (onClick)="onRunExchange(row)"
+                    [pTooltip]="row.action === 'Send' ? 'Send batch file' : 'Retrieve batch file'"
+                  />
                 </td>
               </tr>
-            }
-          </tbody>
-        </table>
+            </ng-template>
+          </p-table>
+        </section>
       </div>
-    </section>
-  }
+      </p-tabpanel>
 
-  @if (activeTab === 'accounting') {
-    <section class="rectangle">
-      <div class="rectangle-header">
-        <h2 class="rectangle-title">Day OP</h2>
-        <button class="btn-primary" type="button" (click)="onRunDayOp()">Run Day OP</button>
-      </div>
+      <!-- Écriture Comptable Tab -->
+      <p-tabpanel [value]="1">
+        <div class="tab-content">
+          <!-- Day OP Card -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title-wrapper">
+              <h2 class="card-title">
+                <span class="card-title-icon"><i class="pi pi-calendar"></i></span>
+                Day OP
+              </h2>
+              <p class="card-description">Daily operational accounting entries</p>
+            </div>
+            <p-button 
+              icon="pi pi-play" 
+              label="Run Day OP" 
+              severity="success"
+              (onClick)="onRunDayOp()"
+            />
+          </div>
 
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Process</th>
-              <th>Status</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (row of dayOpRows; track row.name) {
+          <p-table 
+            [value]="dayOpRows" 
+            [tableStyle]="{ 'min-width': '50rem' }"
+            styleClass="p-datatable-sm"
+            [rowHover]="true"
+          >
+            <ng-template pTemplate="header">
               <tr>
-                <td>{{ row.name }}</td>
-                <td><app-status-badge [status]="row.status" /></td>
-                <td>{{ row.startDate }}</td>
-                <td>{{ row.endDate }}</td>
+                <th>Process</th>
+                <th>Status</th>
+                <th>Start Date</th>
+                <th>End Date</th>
               </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="rectangle">
-      <div class="rectangle-header">
-        <h2 class="rectangle-title">Mouvement &amp; Archivage</h2>
-        <button class="btn-primary" type="button" (click)="onRunMouvement()">Run Mouvement &amp; Archivage</button>
-      </div>
-
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Process</th>
-              <th>Status</th>
-              <th>Start Date</th>
-              <th>End Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (row of mouvementRows; track row.name) {
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
               <tr>
-                <td>{{ row.name }}</td>
-                <td><app-status-badge [status]="row.status" /></td>
-                <td>{{ row.startDate }}</td>
-                <td>{{ row.endDate }}</td>
+                <td>
+                  <div class="process-name">
+                    <i class="pi pi-file-edit"></i>
+                    <span>{{ row.name }}</span>
+                  </div>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="row.status" 
+                    [severity]="getStatusSeverity(row.status)"
+                    [icon]="getStatusIcon(row.status)"
+                  />
+                </td>
+                <td class="date-cell">{{ row.startDate }}</td>
+                <td class="date-cell">{{ row.endDate }}</td>
               </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </section>
-  }
+            </ng-template>
+          </p-table>
+        </section>
 
-  @if (activeTab === 'deletion') {
-    <section class="rectangle">
-      <h2 class="rectangle-title">Suppression</h2>
+        <!-- Mouvement & Archivage Card -->
+        <section class="card">
+          <div class="card-header">
+            <div class="card-title-wrapper">
+              <h2 class="card-title">
+                <span class="card-title-icon"><i class="pi pi-database"></i></span>
+                Mouvement & Archivage
+              </h2>
+              <p class="card-description">Transaction movements and archive operations</p>
+            </div>
+            <p-button 
+              icon="pi pi-play" 
+              label="Run Mouvement & Archivage" 
+              severity="success"
+              (onClick)="onRunMouvement()"
+            />
+          </div>
 
-      <div class="info-box">
-        This section simulates a deletion workflow. Selecting a date triggers an action.
+          <p-table 
+            [value]="mouvementRows" 
+            [tableStyle]="{ 'min-width': '50rem' }"
+            styleClass="p-datatable-sm"
+            [rowHover]="true"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Process</th>
+                <th>Status</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td>
+                  <div class="process-name">
+                    <i class="pi pi-arrow-right-arrow-left"></i>
+                    <span>{{ row.name }}</span>
+                  </div>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="row.status" 
+                    [severity]="getStatusSeverity(row.status)"
+                    [icon]="getStatusIcon(row.status)"
+                  />
+                </td>
+                <td class="date-cell">{{ row.startDate }}</td>
+                <td class="date-cell">{{ row.endDate }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </section>
       </div>
+      </p-tabpanel>
 
-      <div class="form-row">
-        <label class="form-label" for="clearDate">Select Date to Clear Data:</label>
-        <input
-          id="clearDate"
-          class="date-input"
-          type="date"
-          (change)="onClearDateChange(($any($event.target)).value)"
-        />
+      <!-- Suppression Tab -->
+      <p-tabpanel [value]="2">
+        <div class="tab-content">
+          <section class="card deletion-card">
+            <div class="card-header">
+              <div class="card-title-wrapper">
+                <h2 class="card-title">
+                  <span class="card-title-icon danger"><i class="pi pi-trash"></i></span>
+                  Data Cleanup
+                </h2>
+                <p class="card-description">Remove processed data for a specific date</p>
+              </div>
+            </div>
+
+            <div class="info-box">
+              <i class="pi pi-info-circle info-box-icon"></i>
+              <span>Select a date to clear all associated transaction data. This action cannot be undone.</span>
+            </div>
+
+            <div class="deletion-form">
+              <div class="form-group">
+                <label class="form-label">Select Date to Clear Data</label>
+                <p-datepicker 
+                [(ngModel)]="selectedClearDate" 
+                [showIcon]="true"
+                dateFormat="dd/mm/yy"
+                placeholder="Select a date"
+                [style]="{ width: '100%' }"
+              />
+            </div>
+            <p-button 
+              icon="pi pi-trash" 
+              label="Clear Data" 
+              severity="danger"
+              [disabled]="!selectedClearDate"
+              (onClick)="onClearData()"
+            />
+          </div>
+
+          <div class="warning-box">
+            <i class="pi pi-exclamation-triangle warning-box-icon"></i>
+            <div class="warning-content">
+              <strong>Warning</strong>
+              <p>Deleting data is permanent and cannot be recovered. Please ensure you have proper backups before proceeding.</p>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
-  }
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
 </div>

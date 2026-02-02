@@ -1,0 +1,79 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- sonarBranch
+
+
+resources:
+  pipelines:
+    - pipeline: sourcePipeline
+      project: 'BACK Portal SPARK'
+      source: 'ENTITY_SERVICE_FSBK'
+      branch: Dev
+      trigger: 
+        branches:
+          include:
+            - Dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      buildType: 'specific'
+      project: 'BACK Portal SPARK'
+      pipeline: 'ENTITY_SERVICE_FSBK'
+      artifactName: 'springboot-app'
+      targetPath: '$(Pipeline.Workspace)/downloaded-artifact'
+
+  - checkout: self
+
+  - task: JavaToolInstaller@0
+    inputs:
+      versionSpec: '17'
+      jdkArchitectureOption: 'x64'
+      jdkSourceOption: 'PreInstalled'
+
+  - task: SonarQubePrepare@6
+    inputs:
+      SonarQube: 'Back'
+      scannerMode: 'Other'
+      extraProperties: |
+        # Additional properties that will be passed to the scanner,
+        # Put one key=value per line, example:
+        # sonar.exclusions=**/*.bin
+        sonar.projectKey=FSBK
+        sonar.projectName=FSBK
+
+  - script: |
+      echo "Installing the JAR file into the local Maven repository"
+      mvn install:install-file -Dfile="$(Pipeline.Workspace)/downloaded-artifact/unified-1.0.0.jar" -DgroupId=sparkJar -DartifactId=sparkJar -Dversion=1.0 -Dpackaging=jar
+      mvn clean package -DskipTests -X
+    displayName: 'Install JAR, Update Project, and Build Project'  
+
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'clean package sonar:sonar'
+      options: '-DskipTests'
+      jdkVersionOption: '1.17'
+      mavenVersionOption: 'Default'
+      
+      sonarQubeRunAnalysis: true
+
+  - task: SonarQubePublish@6
+    inputs:
+      pollingTimeoutSec: '300'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(System.DefaultWorkingDirectory)/target/'
+      ArtifactName: 'springboot-app2'
+
+
+
+ 

@@ -1,0 +1,707 @@
+/* Modern Light Theme - Apify/Supabase inspired */
+@import 'primeicons/primeicons.css';
+
+:root {
+  /* Light theme colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f1f5f9;
+  --bg-elevated: #f8fafc;
+  
+  /* Accent colors - teal/green gradient like Supabase */
+  --accent-primary: #10b981;
+  --accent-secondary: #059669;
+  --accent-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --accent-glow: rgba(16, 185, 129, 0.12);
+  --accent-light: #ecfdf5;
+  
+  /* Text colors */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  
+  /* Border colors */
+  --border-primary: #e2e8f0;
+  --border-hover: #cbd5e1;
+  
+  /* Status colors */
+  --status-success: #10b981;
+  --status-success-bg: #ecfdf5;
+  --status-warning: #f59e0b;
+  --status-warning-bg: #fffbeb;
+  --status-error: #ef4444;
+  --status-error-bg: #fef2f2;
+  --status-info: #3b82f6;
+  --status-info-bg: #eff6ff;
+  --status-pending: #64748b;
+  --status-pending-bg: #f1f5f9;
+  
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 20px var(--accent-glow);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Page Container */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1400px;
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.page-title {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+  margin: 8px 0 0 0;
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+/* Modern Card */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-title-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--accent-light);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-primary);
+  font-size: 18px;
+}
+
+.card-description {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.status-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.status-done {
+  background: var(--status-success-bg);
+  color: var(--status-success);
+}
+
+.status-done::before {
+  background: var(--status-success);
+}
+
+.status-pending {
+  background: var(--status-pending-bg);
+  color: var(--status-pending);
+}
+
+.status-pending::before {
+  background: var(--status-pending);
+  animation: none;
+}
+
+.status-error {
+  background: var(--status-error-bg);
+  color: var(--status-error);
+}
+
+.status-error::before {
+  background: var(--status-error);
+}
+
+.status-validating {
+  background: var(--status-info-bg);
+  color: var(--status-info);
+}
+
+.status-validating::before {
+  background: var(--status-info);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Tabs */
+.modern-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.modern-tab {
+  background: transparent;
+  border: none;
+  padding: 12px 20px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.modern-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-card);
+}
+
+.modern-tab.active {
+  color: var(--text-primary);
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Info Box */
+.info-box {
+  background: var(--status-info-bg);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 12px;
+  padding: 16px 20px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.info-box-icon {
+  color: var(--status-info);
+  font-size: 18px;
+}
+
+/* Form Elements */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 360px;
+}
+
+.form-label {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Legacy support - hidden */
+.rectangle,
+.rectangle-title,
+.rectangle-header,
+.table-container,
+.data-table,
+.tabs,
+.tab {
+  display: none;
+}
+
+/* PrimeNG Overrides for Light Theme */
+.p-datatable {
+  background: transparent !important;
+}
+
+.p-datatable .p-datatable-header {
+  background: transparent !important;
+  border: none !important;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background: var(--bg-secondary) !important;
+  color: var(--text-muted) !important;
+  border-color: var(--border-primary) !important;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 14px 16px !important;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  background: var(--bg-card) !important;
+  transition: background 0.2s ease;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background: var(--bg-card-hover) !important;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  border-color: var(--border-primary) !important;
+  color: var(--text-primary) !important;
+  padding: 16px !important;
+}
+
+/* PrimeNG Buttons - Modern Refined Style */
+.p-button {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.01em !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  padding: 10px 18px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.p-button .p-button-icon {
+  font-size: 14px !important;
+}
+
+.p-button.p-button-sm {
+  padding: 8px 14px !important;
+  font-size: 12px !important;
+}
+
+/* Success/Primary Button - Gradient with glow */
+.p-button.p-button-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%) !important;
+  border: none !important;
+  color: white !important;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.25), 0 0 0 0 rgba(16, 185, 129, 0) !important;
+}
+
+.p-button.p-button-success::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.p-button.p-button-success:hover::before {
+  left: 100%;
+}
+
+.p-button.p-button-success:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35), 0 4px 8px rgba(16, 185, 129, 0.2) !important;
+}
+
+.p-button.p-button-success:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.25) !important;
+}
+
+.p-button.p-button-success:disabled {
+  opacity: 0.5 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+
+.p-button.p-button-success:disabled::before {
+  display: none;
+}
+
+/* Secondary Button - Clean outline style */
+.p-button.p-button-secondary {
+  background: var(--bg-card) !important;
+  border: 1.5px solid var(--border-primary) !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.p-button.p-button-secondary:hover {
+  background: var(--bg-secondary) !important;
+  border-color: var(--text-muted) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.p-button.p-button-secondary:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Danger Button - Bold red with depth */
+.p-button.p-button-danger {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+  border: 1.5px solid #fca5a5 !important;
+  color: #dc2626 !important;
+  box-shadow: 0 1px 2px rgba(239, 68, 68, 0.1) !important;
+}
+
+.p-button.p-button-danger:hover {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  border-color: #dc2626 !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3), 0 4px 8px rgba(239, 68, 68, 0.15) !important;
+}
+
+.p-button.p-button-danger:active {
+  transform: translateY(0) !important;
+}
+
+/* Warning Button - Warm amber tones */
+.p-button.p-button-warning,
+.p-button.p-button-warn {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%) !important;
+  border: 1.5px solid #fbbf24 !important;
+  color: #b45309 !important;
+  box-shadow: 0 1px 2px rgba(245, 158, 11, 0.1) !important;
+}
+
+.p-button.p-button-warning:hover,
+.p-button.p-button-warn:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  border-color: #d97706 !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3), 0 4px 8px rgba(245, 158, 11, 0.15) !important;
+}
+
+.p-button.p-button-warning:active,
+.p-button.p-button-warn:active {
+  transform: translateY(0) !important;
+}
+
+/* Info Button - Cool blue tones */
+.p-button.p-button-info {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+  border: 1.5px solid #60a5fa !important;
+  color: #1d4ed8 !important;
+  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.1) !important;
+}
+
+.p-button.p-button-info:hover {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+  border-color: #2563eb !important;
+  color: white !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3), 0 4px 8px rgba(59, 130, 246, 0.15) !important;
+}
+
+.p-button.p-button-info:active {
+  transform: translateY(0) !important;
+}
+
+/* Text/Link Button */
+.p-button.p-button-text {
+  background: transparent !important;
+  border: none !important;
+  color: var(--accent-primary) !important;
+  padding: 8px 12px !important;
+}
+
+.p-button.p-button-text:hover {
+  background: var(--accent-light) !important;
+  transform: none !important;
+}
+
+/* Outlined Buttons */
+.p-button.p-button-outlined {
+  background: transparent !important;
+}
+
+.p-button.p-button-outlined.p-button-secondary {
+  border: 1.5px solid var(--border-hover) !important;
+  color: var(--text-secondary) !important;
+}
+
+.p-button.p-button-outlined.p-button-secondary:hover {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--text-muted) !important;
+}
+
+/* Icon-only Buttons */
+.p-button.p-button-icon-only {
+  width: 38px !important;
+  height: 38px !important;
+  padding: 0 !important;
+  border-radius: 10px !important;
+}
+
+.p-button.p-button-icon-only.p-button-sm {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.p-button.p-button-icon-only .p-button-icon {
+  font-size: 16px !important;
+}
+
+/* Button with Icon - better icon spacing */
+.p-button .p-button-label {
+  font-weight: 600 !important;
+}
+
+.p-button:not(.p-button-icon-only) .p-button-icon {
+  margin-right: 6px !important;
+}
+
+/* Rounded variant */
+.p-button.p-button-rounded {
+  border-radius: 50px !important;
+}
+
+/* Loading state */
+.p-button.p-button-loading {
+  pointer-events: none !important;
+  opacity: 0.8 !important;
+}
+
+.p-button.p-button-loading .p-button-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Action Buttons Container - Modern flex layout */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-buttons .p-button {
+  flex-shrink: 0;
+}
+
+/* PrimeNG Tabs */
+.p-tabs {
+  background: transparent !important;
+}
+
+.p-tablist {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-primary) !important;
+  border-radius: 12px !important;
+  padding: 4px !important;
+}
+
+.p-tab {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 8px !important;
+  color: var(--text-secondary) !important;
+  padding: 12px 20px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  gap: 8px !important;
+}
+
+.p-tab:hover {
+  background: var(--bg-elevated) !important;
+  color: var(--text-primary) !important;
+}
+
+.p-tab.p-tab-active,
+.p-tab[data-p-active="true"] {
+  background: var(--accent-light) !important;
+  color: var(--accent-primary) !important;
+}
+
+.p-tabpanels {
+  background: transparent !important;
+  padding: 24px 0 0 0 !important;
+}
+
+.p-tabpanel {
+  padding: 0 !important;
+}
+
+/* PrimeNG DatePicker */
+.p-datepicker {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-primary) !important;
+  border-radius: 12px !important;
+}
+
+.p-datepicker-input {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-primary) !important;
+  border-radius: 8px !important;
+  color: var(--text-primary) !important;
+  padding: 12px 16px !important;
+}
+
+.p-datepicker-input:focus {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+/* PrimeNG Tags */
+.p-tag {
+  border-radius: 100px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  padding: 6px 12px !important;
+}
+
+.p-tag.p-tag-success {
+  background: var(--status-success-bg) !important;
+  color: var(--status-success) !important;
+}
+
+.p-tag.p-tag-danger {
+  background: var(--status-error-bg) !important;
+  color: var(--status-error) !important;
+}
+
+.p-tag.p-tag-warning,
+.p-tag.p-tag-warn {
+  background: var(--status-warning-bg) !important;
+  color: var(--status-warning) !important;
+}
+
+.p-tag.p-tag-info {
+  background: var(--status-info-bg) !important;
+  color: var(--status-info) !important;
+}
+
+.p-tag.p-tag-secondary {
+  background: var(--status-pending-bg) !important;
+  color: var(--status-pending) !important;
+}
+
+/* PrimeNG Tooltip */
+.p-tooltip {
+  background: var(--text-primary) !important;
+  color: var(--bg-card) !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  padding: 8px 12px !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    height: auto;
+    padding: 12px 0;
+  }
+
+  .navbar-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .navbar-links {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .main-content {
+    padding: 20px 16px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+}

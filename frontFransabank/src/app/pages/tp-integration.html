@@ -1,74 +1,221 @@
 <div class="page-container">
-  <h1 class="page-title">TP Integration</h1>
+  <!-- Page Header -->
+  <div class="page-header-section">
+    <h1 class="page-title">TP Integration</h1>
+    <p class="page-subtitle">Manage and monitor file integration processes for national and international transactions</p>
+  </div>
 
-  <section class="rectangle">
-    <h2 class="rectangle-title">Integration Fichier National</h2>
-
-    <div class="table-container">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Integration</th>
-            <th>Status</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (row of nationalIntegrations; track row.name) {
-            <tr>
-              <td>{{ row.name }}</td>
-              <td><app-status-badge [status]="row.status" /></td>
-              <td>{{ row.startDate }}</td>
-              <td>{{ row.endDate }}</td>
-              <td>
-                <div class="button-group">
-                  <button class="btn-primary btn-small" type="button" (click)="onStart(row)">Start</button>
-                  @if (row.status === 'Error') {
-                    <button class="btn-danger btn-small" type="button" (click)="onBypass(row)">Bypass</button>
-                  }
-                  <button class="btn-secondary btn-small" type="button" (click)="onView(row)">View</button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+  <!-- Stats Overview -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon success">
+        <i class="pi pi-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ completedCount }}</span>
+        <span class="stat-label">Completed</span>
+      </div>
     </div>
+    <div class="stat-card">
+      <div class="stat-icon warning">
+        <i class="pi pi-clock"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ pendingCount }}</span>
+        <span class="stat-label">Pending</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon info">
+        <i class="pi pi-spin pi-spinner"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ inProgressCount }}</span>
+        <span class="stat-label">In Progress</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon error">
+        <i class="pi pi-times-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-value">{{ errorCount }}</span>
+        <span class="stat-label">Failed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- National Integration Card -->
+  <section class="card">
+    <div class="card-header">
+      <div class="card-title-wrapper">
+        <h2 class="card-title">
+          <span class="card-title-icon"><i class="pi pi-home"></i></span>
+          National File Integration
+        </h2>
+        <p class="card-description">Local transaction files (TP, TPM, TPE)</p>
+      </div>
+      <p-button 
+        icon="pi pi-refresh" 
+        label="Refresh All" 
+        severity="secondary"
+        [outlined]="true"
+        size="small"
+      />
+    </div>
+
+    <p-table 
+      [value]="nationalIntegrations" 
+      [tableStyle]="{ 'min-width': '60rem' }"
+      styleClass="p-datatable-sm"
+      [rowHover]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Integration</th>
+          <th>Status</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th style="width: 220px">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>
+            <div class="integration-name">
+              <i class="pi pi-file"></i>
+              <span>{{ row.name }}</span>
+            </div>
+          </td>
+          <td>
+            <p-tag 
+              [value]="row.status" 
+              [severity]="getStatusSeverity(row.status)"
+              [icon]="getStatusIcon(row.status)"
+            />
+          </td>
+          <td class="date-cell">{{ row.startDate }}</td>
+          <td class="date-cell">{{ row.endDate }}</td>
+          <td>
+            <div class="action-buttons">
+              <p-button 
+                icon="pi pi-play" 
+                label="Start" 
+                severity="success"
+                size="small"
+                [disabled]="isStartDisabled(row)"
+                (onClick)="onStart(row)"
+                pTooltip="Start integration process"
+              />
+              @if (row.status === 'Error') {
+                <p-button 
+                  icon="pi pi-forward" 
+                  label="Bypass" 
+                  severity="danger"
+                  size="small"
+                  (onClick)="onBypass(row)"
+                  pTooltip="Skip this integration"
+                />
+              }
+              <p-button 
+                icon="pi pi-eye" 
+                severity="secondary"
+                size="small"
+                [outlined]="true"
+                (onClick)="onView(row)"
+                pTooltip="View details"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </section>
 
-  <section class="rectangle">
-    <h2 class="rectangle-title">Integration Fichier International</h2>
-
-    <div class="table-container">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Integration</th>
-            <th>Status</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (row of internationalIntegrations; track row.name) {
-            <tr>
-              <td>{{ row.name }}</td>
-              <td><app-status-badge [status]="row.status" /></td>
-              <td>{{ row.startDate }}</td>
-              <td>{{ row.endDate }}</td>
-              <td>
-                <div class="button-group">
-                  <button class="btn-primary btn-small" type="button" (click)="onStart(row)">Start</button>
-                  <button class="btn-secondary btn-small" type="button" (click)="onView(row)">View</button>
-                </div>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
+  <!-- International Integration Card -->
+  <section class="card">
+    <div class="card-header">
+      <div class="card-title-wrapper">
+        <h2 class="card-title">
+          <span class="card-title-icon"><i class="pi pi-globe"></i></span>
+          International File Integration
+        </h2>
+        <p class="card-description">Cross-border transactions (VISA, Mastercard, SWIFT)</p>
+      </div>
+      <p-button 
+        icon="pi pi-refresh" 
+        label="Refresh All" 
+        severity="secondary"
+        [outlined]="true"
+        size="small"
+      />
     </div>
+
+    <p-table 
+      [value]="internationalIntegrations" 
+      [tableStyle]="{ 'min-width': '60rem' }"
+      styleClass="p-datatable-sm"
+      [rowHover]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Integration</th>
+          <th>Status</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th style="width: 220px">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>
+            <div class="integration-name">
+              <i class="pi pi-credit-card"></i>
+              <span>{{ row.name }}</span>
+            </div>
+          </td>
+          <td>
+            <p-tag 
+              [value]="row.status" 
+              [severity]="getStatusSeverity(row.status)"
+              [icon]="getStatusIcon(row.status)"
+            />
+          </td>
+          <td class="date-cell">{{ row.startDate }}</td>
+          <td class="date-cell">{{ row.endDate }}</td>
+          <td>
+            <div class="action-buttons">
+              <p-button 
+                icon="pi pi-play" 
+                label="Start" 
+                severity="success"
+                size="small"
+                [disabled]="isStartDisabled(row)"
+                (onClick)="onStart(row)"
+                pTooltip="Start integration process"
+              />
+              @if (row.status === 'Error') {
+                <p-button 
+                  icon="pi pi-forward" 
+                  label="Bypass" 
+                  severity="danger"
+                  size="small"
+                  (onClick)="onBypass(row)"
+                  pTooltip="Skip this integration"
+                />
+              }
+              <p-button 
+                icon="pi pi-eye" 
+                severity="secondary"
+                size="small"
+                [outlined]="true"
+                (onClick)="onView(row)"
+                pTooltip="View details"
+              />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </section>
 </div>
