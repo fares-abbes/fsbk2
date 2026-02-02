@@ -102,6 +102,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/cardManagement/saveGlobalAndDetailledRM/**").permitAll()//
 
                 .antMatchers("/balance/update").permitAll()//
+                .antMatchers("/BatchHistory/**").permitAll()//
                 //.antMatchers("/executorThreadUAP051INFileBC/buildControlTp").permitAll()//
              //   .antMatchers("/FileRequest/croControl").permitAll()//
                 .anyRequest().authenticated().and().headers().addHeaderWriter(new StaticHeadersWriter("Server","server")).and().headers().frameOptions().sameOrigin()
