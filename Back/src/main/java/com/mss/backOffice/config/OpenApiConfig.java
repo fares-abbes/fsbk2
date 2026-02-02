@@ -50,7 +50,8 @@ public class OpenApiConfig {
                         "/matchingUAP070IN/*",
                 "/api/international-processing/*",
                     "/IntegrationFileInternational/*",
-                    "/ChargeBacksController/*"
+                    "/ChargeBacksController/*",
+                    "/BatchHistory/*"
                     // Add more specific paths here as needed
                     // "/OtherController/specificEndpoint",
                     // "/AnotherController/anotherEndpoint"
