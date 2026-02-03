@@ -56,6 +56,10 @@ public class BatchesHistory {
     @Temporal(TemporalType.TIMESTAMP)
     private Date selectedEndDate;
 
+    @Column(name = "BATCH_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date batchDate;
+
     @Column(name = "STATUS")
     private Integer status;
 
@@ -154,6 +158,14 @@ public class BatchesHistory {
 
     public void setSelectedEndDate(Date selectedEndDate) {
         this.selectedEndDate = selectedEndDate;
+    }
+
+    public Date getBatchDate() {
+        return batchDate;
+    }
+
+    public void setBatchDate(Date batchDate) {
+        this.batchDate = batchDate;
     }
 
     public Integer getStatus() {

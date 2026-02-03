@@ -121,10 +121,13 @@ public class BatchExecService {
         history.setBatchType(null);
         history.setBatchLastExecution(null);
         
+        // Set batchDate to the current date in the range (12, 13, 14, etc.)
+        history.setBatchDate(currentDate);
+        
         // Leave batch execution dates null
         history.setBatchHStartDate(null);
         history.setBatchHEndDate(null);
-        
+       
         // Set the selected date range from BatchExec
         history.setSelectedStartDate(selectedStartDate);
         history.setSelectedEndDate(selectedEndDate);
@@ -135,8 +138,7 @@ public class BatchExecService {
         history.setException(null);
         history.setBypassStatus(null);
         
-        // Set createdAt to the desired date (this will override @PrePersist)
-        history.setCreatedAt(currentDate);
+        // createdAt will be set automatically by @PrePersist to current timestamp
         
         batchesHistoryRepository.save(history);
         
