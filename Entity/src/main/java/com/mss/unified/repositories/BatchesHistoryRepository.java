@@ -44,4 +44,10 @@ public interface BatchesHistoryRepository extends JpaRepository<BatchesHistory, 
      * Find history records by batch type
      */
     List<BatchesHistory> findByBatchType(String batchType);
+    
+    /**
+     * Check if a history record exists for a specific batch on a specific date
+     */
+    @Query("SELECT CASE WHEN COUNT(bh) > 0 THEN true ELSE false END FROM BatchesHistory bh WHERE bh.batch.batchId = :batchId AND CAST(bh.batchHStartDate AS date) = CAST(:date AS date)")
+    boolean existsByBatchIdAndDate(int batchId, java.util.Date date);
 }

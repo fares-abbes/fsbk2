@@ -50,6 +50,14 @@ public class BatchesHistory {
     @Column(name = "BATCH_H_ENDDATE")
     private Date batchHEndDate;
 
+    @Column(name = "SELECTED_START_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date selectedStartDate;
+
+    @Column(name = "SELECTED_END_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date selectedEndDate;
+
     @Column(name = "STATUS")
     private Integer status;
 
@@ -132,6 +140,22 @@ public class BatchesHistory {
 
     public void setBatchHEndDate(Date batchHEndDate) {
         this.batchHEndDate = batchHEndDate;
+    }
+
+    public Date getSelectedStartDate() {
+        return selectedStartDate;
+    }
+
+    public void setSelectedStartDate(Date selectedStartDate) {
+        this.selectedStartDate = selectedStartDate;
+    }
+
+    public Date getSelectedEndDate() {
+        return selectedEndDate;
+    }
+
+    public void setSelectedEndDate(Date selectedEndDate) {
+        this.selectedEndDate = selectedEndDate;
     }
 
     public Integer getStatus() {
