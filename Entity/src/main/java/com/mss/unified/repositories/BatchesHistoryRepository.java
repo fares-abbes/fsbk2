@@ -49,12 +49,12 @@ public interface BatchesHistoryRepository extends JpaRepository<BatchesHistory, 
      * Check if a history record exists for a specific batch on a specific date
      * Compares dates by truncating to day level
      */
-    @Query("SELECT CASE WHEN COUNT(bh) > 0 THEN true ELSE false END FROM BatchesHistory bh WHERE bh.batch.batchId = :batchId AND FUNCTION('TRUNC', bh.batchHStartDate) = FUNCTION('TRUNC', :date)")
+    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM FRANSABANK.BATCHES_HISTORY WHERE BATCH_ID = :batchId AND TRUNC(BATCH_H_STARTDATE) = TRUNC(:date)", nativeQuery = true)
     boolean existsByBatchIdAndDate(int batchId, java.util.Date date);
     
     /**
      * Check if any history record exists for a specific date (regardless of batch)
      */
-    @Query("SELECT CASE WHEN COUNT(bh) > 0 THEN true ELSE false END FROM BatchesHistory bh WHERE FUNCTION('TRUNC', bh.batchHStartDate) = FUNCTION('TRUNC', :date)")
+    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM FRANSABANK.BATCHES_HISTORY WHERE TRUNC(BATCH_H_STARTDATE) = TRUNC(:date)", nativeQuery = true)
     boolean existsByBatchHStartDate(java.util.Date date);
 }
