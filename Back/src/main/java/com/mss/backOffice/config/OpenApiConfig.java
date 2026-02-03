@@ -51,7 +51,8 @@ public class OpenApiConfig {
                 "/api/international-processing/*",
                     "/IntegrationFileInternational/*",
                     "/ChargeBacksController/*",
-                    "/BatchHistory/*"
+                    "/BatchHistory/*",
+                    "/batchExec/*"
                     // Add more specific paths here as needed
                     // "/OtherController/specificEndpoint",
                     // "/AnotherController/anotherEndpoint"
