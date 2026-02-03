@@ -89,7 +89,7 @@ public class batchHistoryService {
         BatchesHistory history = new BatchesHistory();
         
         // Sync from BatchesFC
-        history.setBatch(batch);
+        history.setBatchId(batch.getBatchId());
         history.setBatchName(batch.getBatchName());
         history.setBatchType(batch.getBatchType());
         history.setBatchLastExecution(batch.getBatchLastExcution());

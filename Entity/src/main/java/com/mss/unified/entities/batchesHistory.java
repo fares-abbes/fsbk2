@@ -22,12 +22,10 @@ public class BatchesHistory {
     private Long batchHId;
 
     /* ========================
-       Relation to BATCHESFC
+       Batch ID (no relation)
        ======================== */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BATCH_ID", nullable = true)
-    @JsonIgnore
-    private BatchesFC batch;
+    @Column(name = "BATCH_ID")
+    private Integer batchId;
 
     /* ========================
        Synced from BATCHESFC
@@ -94,12 +92,12 @@ public class BatchesHistory {
         this.batchHId = batchHId;
     }
 
-    public BatchesFC getBatch() {
-        return batch;
+    public Integer getBatchId() {
+        return batchId;
     }
 
-    public void setBatch(BatchesFC batch) {
-        this.batch = batch;
+    public void setBatchId(Integer batchId) {
+        this.batchId = batchId;
     }
 
     public String getBatchName() {

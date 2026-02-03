@@ -116,7 +116,7 @@ public class BatchExecService {
         BatchesHistory history = new BatchesHistory();
         
         // Set minimal fields - only what's needed
-        history.setBatch(null);
+        history.setBatchId(null);
         history.setBatchName(null);
         history.setBatchType(null);
         history.setBatchLastExecution(null);

@@ -15,19 +15,19 @@ public interface BatchesHistoryRepository extends JpaRepository<BatchesHistory, 
     /**
      * Find all history records for a specific batch by batchId
      */
-    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batch.batchId = :batchId ORDER BY bh.createdAt DESC")
+    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batchId = :batchId ORDER BY bh.createdAt DESC")
     List<BatchesHistory> findByBatchId(int batchId);
     
     /**
      * Find the latest history record for a specific batch
      */
-    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batch.batchId = :batchId ORDER BY bh.createdAt DESC")
+    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batchId = :batchId ORDER BY bh.createdAt DESC")
     Optional<BatchesHistory> findLatestByBatchId(int batchId);
     
     /**
      * Check if a history record exists for a batch with specific lastExecution date
      */
-    @Query("SELECT CASE WHEN COUNT(bh) > 0 THEN true ELSE false END FROM BatchesHistory bh WHERE bh.batch.batchId = :batchId AND bh.batchLastExecution = :lastExecution")
+    @Query("SELECT CASE WHEN COUNT(bh) > 0 THEN true ELSE false END FROM BatchesHistory bh WHERE bh.batchId = :batchId AND bh.batchLastExecution = :lastExecution")
     boolean existsByBatchIdAndLastExecution(int batchId, java.util.Date lastExecution);
     
     /**
