@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ public class BatchExecController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError()
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error creating batch history: " + e.getMessage());
         }
     }
@@ -57,7 +58,7 @@ public class BatchExecController {
             BatchExec batchExec = batchExecService.createBatchExec(startDate, endDate);
             return ResponseEntity.ok(batchExec);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError()
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error creating BatchExec: " + e.getMessage());
         }
     }
@@ -86,7 +87,7 @@ public class BatchExecController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError()
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error creating BatchExec and histories: " + e.getMessage());
         }
     }
@@ -105,7 +106,7 @@ public class BatchExecController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return ResponseEntity.internalServerError()
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error retrieving BatchExec: " + e.getMessage());
         }
     }
@@ -121,7 +122,7 @@ public class BatchExecController {
             List<BatchExec> batchExecs = batchExecService.getAllBatchExec();
             return ResponseEntity.ok(batchExecs);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
