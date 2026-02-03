@@ -131,7 +131,7 @@ public class BatchExecService {
         // Set the selected date range from BatchExec
         history.setSelectedStartDate(selectedStartDate);
         history.setSelectedEndDate(selectedEndDate);
-        
+        history.setStatus(3);
         // Initialize status and other fields as null/default
         history.setStatus(null);
         history.setErreur(null);
