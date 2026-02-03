@@ -47,7 +47,8 @@ public interface BatchesHistoryRepository extends JpaRepository<BatchesHistory, 
     
     /**
      * Check if a history record exists for a specific batch on a specific date
+     * Compares dates by truncating to day level
      */
-    @Query("SELECT CASE WHEN COUNT(bh) > 0 THEN true ELSE false END FROM BatchesHistory bh WHERE bh.batch.batchId = :batchId AND CAST(bh.batchHStartDate AS date) = CAST(:date AS date)")
+    @Query("SELECT CASE WHEN COUNT(bh) > 0 THEN true ELSE false END FROM BatchesHistory bh WHERE bh.batch.batchId = :batchId AND FUNCTION('TRUNC', bh.batchHStartDate) = FUNCTION('TRUNC', :date)")
     boolean existsByBatchIdAndDate(int batchId, java.util.Date date);
 }

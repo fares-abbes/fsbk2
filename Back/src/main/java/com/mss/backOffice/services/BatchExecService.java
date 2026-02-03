@@ -67,6 +67,7 @@ public class BatchExecService {
         
         // Get all batches from BatchesFC
         List<BatchesFC> allBatches = batchesFCRepository.findAll();
+        logger.info("Found {} batches in BatchesFC to process", allBatches.size());
         
         // Iterate through each date in the range
         Calendar calendar = Calendar.getInstance();
@@ -88,11 +89,14 @@ public class BatchExecService {
         
         while (!calendar.after(endCalendar)) {
             Date currentDate = calendar.getTime();
+            logger.info("Processing date: {}", currentDate);
             
             // For each batch, create a history record for this date if it doesn't exist
             for (BatchesFC batch : allBatches) {
                 // Check if a batch history already exists for this batch on this date
-                if (!batchesHistoryRepository.existsByBatchIdAndDate(batch.getBatchId(), currentDate)) {
+                boolean exists = batchesHistoryRepository.existsByBatchIdAndDate(batch.getBatchId(), currentDate);
+                logger.debug("Batch {} (ID: {}) on date {}: exists = {}", batch.getBatchName(), batch.getBatchId(), currentDate, exists);
+                if (!exists) {
                     BatchesHistory history = createHistoryRecordForDate(batch, currentDate, startDate, endDate);
                     createdHistories.add(history);
                     totalCreated++;
