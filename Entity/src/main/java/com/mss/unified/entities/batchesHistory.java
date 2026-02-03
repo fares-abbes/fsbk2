@@ -194,6 +194,10 @@ public class BatchesHistory {
         return createdAt;
     }
 
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     /* ========================
        toString (safe)
        ======================== */

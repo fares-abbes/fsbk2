@@ -54,8 +54,8 @@ public interface BatchesHistoryRepository extends JpaRepository<BatchesHistory, 
     
     /**
      * Check if any history record exists for a specific date (regardless of batch)
-     * SQL Server compatible date comparison
+     * SQL Server compatible date comparison on CREATED_AT column
      */
-    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM FRANSABANK.BATCHES_HISTORY WHERE CAST(BATCH_H_STARTDATE AS DATE) = CAST(:date AS DATE)", nativeQuery = true)
+    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM FRANSABANK.BATCHES_HISTORY WHERE CAST(CREATED_AT AS DATE) = CAST(:date AS DATE)", nativeQuery = true)
     boolean existsByBatchHStartDate(java.util.Date date);
 }

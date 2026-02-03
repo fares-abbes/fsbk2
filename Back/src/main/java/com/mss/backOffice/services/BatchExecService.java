@@ -109,38 +109,34 @@ public class BatchExecService {
     /**
      * Creates a BatchesHistory record for a specific date.
      * Sets the selectedStartDate and selectedEndDate from the BatchExec range.
+     * The date goes into createdAt column.
      */
     private BatchesHistory createHistoryRecordForDate(Date currentDate, 
                                                       Date selectedStartDate, Date selectedEndDate) {
         BatchesHistory history = new BatchesHistory();
         
-        // No specific batch - this is a date-based entry
+        // Set minimal fields - only what's needed
         history.setBatch(null);
-        history.setBatchName("ExecuteThread");
+        history.setBatchName(null);
         history.setBatchType(null);
         history.setBatchLastExecution(null);
         
-        // Set the execution date for this specific day
-        history.setBatchHStartDate(currentDate);
-        
-        // Set end date as end of the same day
-        Calendar endOfDay = Calendar.getInstance();
-        endOfDay.setTime(currentDate);
-        endOfDay.set(Calendar.HOUR_OF_DAY, 23);
-        endOfDay.set(Calendar.MINUTE, 59);
-        endOfDay.set(Calendar.SECOND, 59);
-        endOfDay.set(Calendar.MILLISECOND, 999);
-        history.setBatchHEndDate(endOfDay.getTime());
+        // Leave batch execution dates null
+        history.setBatchHStartDate(null);
+        history.setBatchHEndDate(null);
         
         // Set the selected date range from BatchExec
         history.setSelectedStartDate(selectedStartDate);
         history.setSelectedEndDate(selectedEndDate);
         
-        // Initialize status and other fields
-        history.setStatus(0); // Default status: 0 (pending)
+        // Initialize status and other fields as null/default
+        history.setStatus(null);
         history.setErreur(null);
         history.setException(null);
-        history.setBypassStatus(0); // Default bypass status
+        history.setBypassStatus(null);
+        
+        // Set createdAt to the desired date (this will override @PrePersist)
+        history.setCreatedAt(currentDate);
         
         batchesHistoryRepository.save(history);
         
