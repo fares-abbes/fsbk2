@@ -38,8 +38,8 @@ public class BatchExecService {
 
     /**
      * Creates BatchesHistory records for each date in the BatchExec date range.
-     * For each batch in BatchesFC, creates a history record for each day in the range,
-     * but only if no batch history exists for that date.
+     * Creates ONE history record per date (not per batch per date).
+     * Only creates a record if no batch history exists for that date.
      * 
      * @param batchExecId The ID of the BatchExec record containing start and end dates
      * @return List of created BatchesHistory records
@@ -65,10 +65,6 @@ public class BatchExecService {
         
         List<BatchesHistory> createdHistories = new ArrayList<>();
         
-        // Get all batches from BatchesFC
-        List<BatchesFC> allBatches = batchesFCRepository.findAll();
-        logger.info("Found {} batches in BatchesFC to process", allBatches.size());
-        
         // Iterate through each date in the range
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
@@ -91,20 +87,14 @@ public class BatchExecService {
             Date currentDate = calendar.getTime();
             logger.info("Processing date: {}", currentDate);
             
-            // For each batch, create a history record for this date if it doesn't exist
-            for (BatchesFC batch : allBatches) {
-                // Check if a batch history already exists for this batch on this date
-                boolean exists = batchesHistoryRepository.existsByBatchIdAndDate(batch.getBatchId(), currentDate);
-                logger.debug("Batch {} (ID: {}) on date {}: exists = {}", batch.getBatchName(), batch.getBatchId(), currentDate, exists);
-                if (!exists) {
-                    BatchesHistory history = createHistoryRecordForDate(batch, currentDate, startDate, endDate);
-                    createdHistories.add(history);
-                    totalCreated++;
-                } else {
-                    totalSkipped++;
-                    logger.debug("Skipped creating history for batch {} on date {} - already exists", 
-                            batch.getBatchName(), currentDate);
-                }
+            // Check if ANY batch history already exists for this date
+            if (!batchesHistoryRepository.existsByBatchHStartDate(currentDate)) {
+                BatchesHistory history = createHistoryRecordForDate(currentDate, startDate, endDate);
+                createdHistories.add(history);
+                totalCreated++;
+            } else {
+                totalSkipped++;
+                logger.debug("Skipped creating history for date {} - already exists", currentDate);
             }
             
             // Move to next day
@@ -117,18 +107,18 @@ public class BatchExecService {
     }
 
     /**
-     * Creates a BatchesHistory record for a specific batch and date.
+     * Creates a BatchesHistory record for a specific date.
      * Sets the selectedStartDate and selectedEndDate from the BatchExec range.
      */
-    private BatchesHistory createHistoryRecordForDate(BatchesFC batch, Date currentDate, 
+    private BatchesHistory createHistoryRecordForDate(Date currentDate, 
                                                       Date selectedStartDate, Date selectedEndDate) {
         BatchesHistory history = new BatchesHistory();
         
-        // Set basic batch information
-        history.setBatch(batch);
-        history.setBatchName(batch.getBatchName());
-        history.setBatchType(batch.getBatchType());
-        history.setBatchLastExecution(batch.getBatchLastExcution());
+        // No specific batch - this is a date-based entry
+        history.setBatch(null);
+        history.setBatchName("ExecuteThread");
+        history.setBatchType(null);
+        history.setBatchLastExecution(null);
         
         // Set the execution date for this specific day
         history.setBatchHStartDate(currentDate);
@@ -148,13 +138,13 @@ public class BatchExecService {
         
         // Initialize status and other fields
         history.setStatus(0); // Default status: 0 (pending)
-        history.setErreur(batch.getError());
-        history.setException(batch.getErrorStackTrace());
+        history.setErreur(null);
+        history.setException(null);
         history.setBypassStatus(0); // Default bypass status
         
         batchesHistoryRepository.save(history);
         
-        logger.debug("Created history record for batch {} on date {}", batch.getBatchName(), currentDate);
+        logger.debug("Created history record for date {}", currentDate);
         
         return history;
     }

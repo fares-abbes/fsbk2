@@ -25,7 +25,7 @@ public class BatchesHistory {
        Relation to BATCHESFC
        ======================== */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BATCH_ID", nullable = false)
+    @JoinColumn(name = "BATCH_ID", nullable = true)
     @JsonIgnore
     private BatchesFC batch;
 
