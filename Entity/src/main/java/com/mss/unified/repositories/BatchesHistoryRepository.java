@@ -15,20 +15,19 @@ public interface BatchesHistoryRepository extends JpaRepository<BatchesHistory, 
     /**
      * Find all history records for a specific batch by batchId
      */
-    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batchId = :batchId ORDER BY bh.createdAt DESC")
+    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batchId = :batchId ORDER BY bh.batchDate DESC")
     List<BatchesHistory> findByBatchId(int batchId);
     
     /**
      * Find the latest history record for a specific batch
      */
-    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batchId = :batchId ORDER BY bh.createdAt DESC")
+    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batchId = :batchId ORDER BY bh.batchDate DESC")
     Optional<BatchesHistory> findLatestByBatchId(int batchId);
     
     /**
-     * Check if a history record exists for a batch with specific lastExecution date
+     * Check if a history record exists for a batch with specific batchHStartDate
      */
-    @Query("SELECT CASE WHEN COUNT(bh) > 0 THEN true ELSE false END FROM BatchesHistory bh WHERE bh.batchId = :batchId AND bh.batchLastExecution = :lastExecution")
-    boolean existsByBatchIdAndLastExecution(int batchId, java.util.Date lastExecution);
+    boolean existsByBatchIdAndBatchHStartDate(int batchId, java.util.Date batchHStartDate);
     
     /**
      * Find history records by status
@@ -61,9 +60,36 @@ public interface BatchesHistoryRepository extends JpaRepository<BatchesHistory, 
      * SQL Server compatible date comparison on CREATED_AT column
      */
     @Query(value = "SELECT COUNT(*) FROM FRANSABANK.BATCHES_HISTORY WHERE CAST(CREATED_AT AS DATE) = CAST(:date AS DATE)", nativeQuery = true)
-    int countByCreatedAt(java.util.Date date);
-    
+    int countByBatchDate(java.util.Date date);
+
     default boolean existsByBatchHStartDate(java.util.Date date) {
-        return countByCreatedAt(date) > 0;
+        return countByBatchDate(date) > 0;
     }
+
+    /**
+     * Check if a history record exists for a specific date and batch name combination
+     */
+    @Query(value = "SELECT COUNT(*) FROM FRANSABANK.BATCHES_HISTORY WHERE CAST(BATCH_DATE AS DATE) = CAST(:date AS DATE) AND BATCH_NAME = :batchName", nativeQuery = true)
+    int countByBatchDateAndBatchName(java.util.Date date, String batchName);
+    
+    default boolean existsByBatchDateAndBatchName(java.util.Date date, String batchName) {
+        return countByBatchDateAndBatchName(date, batchName) > 0;
+    }
+
+    /**
+     * Find the top history records for a batch name and status, ordered by batch date descending
+     */
+    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batchName = :batchName AND bh.status = :status ORDER BY bh.batchDate DESC")
+    List<BatchesHistory> findTopByBatchNameAndStatusOrderByBatchDateDesc(String batchName, Integer status);
+
+    /**
+     * Find history records for a batch name with batch date greater than the specified date and status not equal to 1
+     */
+    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batchName = :batchName AND bh.batchDate > :startDate AND bh.status != 1 ORDER BY bh.batchDate ASC")
+    List<BatchesHistory> findByBatchNameAndBatchDateGreaterThan(String batchName, java.util.Date startDate);
+
+    /**
+     * Find history record by key
+     */
+    Optional<BatchesHistory> findByKeyfc(String keyfc);
 }

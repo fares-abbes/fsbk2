@@ -39,7 +39,7 @@ public class OpenApiConfig {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("backoffice")
-                .packagesToScan("com.mss.backOffice.controller")
+                .packagesToScan("com.mss.backOffice.controller", "com.mss.backOffice.services")
                 // Only show specific endpoints - add the paths you want to expose
                 .pathsToMatch(
                     "/BankSettlementController/*",
@@ -52,7 +52,8 @@ public class OpenApiConfig {
                     "/IntegrationFileInternational/*",
                     "/ChargeBacksController/*",
                     "/BatchHistory/*",
-                    "/batchExec/*"
+                    "/batchExec/*",
+                    "/addFileTP"
                     // Add more specific paths here as needed
                     // "/OtherController/specificEndpoint",
                     // "/AnotherController/anotherEndpoint"

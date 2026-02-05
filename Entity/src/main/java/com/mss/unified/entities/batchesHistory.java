@@ -36,8 +36,11 @@ public class BatchesHistory {
     @Column(name = "BATCH_TYPE")
     private String batchType;
 
-    @Column(name = "BATCH_LAST_EXEC")
-    private Date batchLastExecution;
+    @Column(name = "KEYFC")
+    private String keyfc;
+
+    @Column(name = "FILE_LOCATION")
+    private String fileLocation;
 
     /* ========================
        Execution-specific data
@@ -72,21 +75,11 @@ public class BatchesHistory {
     @Column(name = "BYPASS_STATUS")
     private Integer bypassStatus;
 
-    @Column(name = "CREATED_AT")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+   
 
-    /* ========================
-       Lifecycle hooks
-       ======================== */
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = new Date();
-    }
+  
+  
 
-    /* ========================
-       Getters & Setters
-       ======================== */
 
     public Long getBatchHId() {
         return batchHId;
@@ -120,12 +113,20 @@ public class BatchesHistory {
         this.batchType = batchType;
     }
 
-    public Date getBatchLastExecution() {
-        return batchLastExecution;
+    public String getKeyfc() {
+        return keyfc;
     }
 
-    public void setBatchLastExecution(Date batchLastExecution) {
-        this.batchLastExecution = batchLastExecution;
+    public void setKeyfc(String keyfc) {
+        this.keyfc = keyfc;
+    }
+
+    public String getFileLocation() {
+        return fileLocation;
+    }
+
+    public void setFileLocation(String fileLocation) {
+        this.fileLocation = fileLocation;
     }
 
     public Date getBatchHStartDate() {
@@ -200,13 +201,7 @@ public class BatchesHistory {
         this.bypassStatus = bypassStatus;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
 
     /* ========================
        toString (safe)

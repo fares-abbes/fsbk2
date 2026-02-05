@@ -44,4 +44,14 @@ public interface BatchesFFCRepository extends JpaRepository<BatchesFC, Integer> 
     @Query("SELECT b FROM BatchesFC b WHERE b.batchLastExcution > :startDate AND b.batchLastExcution < :endDate ORDER BY b.batchLastExcution ASC")
     List<BatchesFC> findBatchesAfterDateUntilYesterday(Date startDate, Date endDate);
 
+    // Find batches where batchLastExcution is after startDate and before endDate for a specific batchName
+    @Query("SELECT b FROM BatchesFC b WHERE b.batchName = :batchName AND b.batchLastExcution > :startDate AND b.batchLastExcution < :endDate ORDER BY b.batchLastExcution ASC")
+    List<BatchesFC> findBatchesAfterDateUntilYesterdayForBatchName(Date startDate, Date endDate, String batchName);
+
+    // Find BatchesFC records by batch name (returns List since there may be multiple)
+    List<BatchesFC> findByBatchName(String batchName);
+
+    // Find first BatchesFC record by batch name
+    Optional<BatchesFC> findFirstByBatchName(String batchName);
+
 }

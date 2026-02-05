@@ -48,6 +48,14 @@ public class BatchHistoryController {
     }
 
     /**
+     * Get pending batches for a specific batch name since the last done history for that batch name
+     */
+    @GetMapping("getPendingBatchesSinceLastDone/{batchName}")
+    public List<BatchesHistory> getPendingBatchesSinceLastDoneForBatch(@PathVariable String batchName) {
+        return batchHistoryService.getPendingBatchesSinceLastDoneForBatch(batchName);
+    }
+
+    /**
      * Update bypass status for a history record
      */
     @PutMapping("updateBypassStatus/{historyId}/{bypassStatus}")
@@ -55,11 +63,5 @@ public class BatchHistoryController {
         batchHistoryService.updateBypassStatus(historyId, bypassStatus);
     }
 
-    /**
-     * Manually sync a batch by key
-     */
-    @PostMapping("syncBatchByKey/{key}")
-    public void syncBatchByKey(@PathVariable String key) {
-        batchHistoryService.syncBatchByKey(key);
-    }
+  
 }

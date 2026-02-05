@@ -45,6 +45,43 @@
     </div>
   </div>
 
+  @if (environment.isDev) {
+    <!-- Dev Mode Batch Creation -->
+    <section class="card">
+      <div class="card-header">
+        <h2 class="card-title">Dev Mode: Create and Execute Batch</h2>
+      </div>
+      <div class="card-content">
+        <div class="dev-form-container">
+          <div class="date-row">
+            <div class="form-field">
+              <label for="startDate">Start Date</label>
+              <p-datepicker 
+                id="startDate"
+                [(ngModel)]="startDate"
+                dateFormat="yy-mm-dd"
+                [showIcon]="true"
+                ngSkipHydration
+                [panelStyle]="{ 'background-color': 'white', 'border': '1px solid #ccc' }"
+              />
+            </div>
+            <div class="form-field">
+              <label for="endDate">End Date</label>
+              <p-datepicker 
+                id="endDate"
+                [(ngModel)]="endDate"
+                dateFormat="yy-mm-dd"
+                [showIcon]="true"
+                ngSkipHydration
+                [panelStyle]="{ 'background-color': 'white', 'border': '1px solid #ccc' }"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
   <!-- National Integration Card -->
   <section class="card">
     <div class="card-header">
@@ -77,6 +114,7 @@
           <th>Start Date</th>
           <th>End Date</th>
           <th style="width: 220px">Actions</th>
+          <th *ngIf="environment.isDev">Batch Exec</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row>
@@ -127,6 +165,15 @@
               />
             </div>
           </td>
+          <td *ngIf="environment.isDev">
+            <p-button 
+              label="Exec" 
+              severity="info"
+              size="small"
+              (onClick)="onBatchExec(row)"
+              pTooltip="Execute batch"
+            />
+          </td>
         </tr>
       </ng-template>
     </p-table>
@@ -164,6 +211,7 @@
           <th>Start Date</th>
           <th>End Date</th>
           <th style="width: 220px">Actions</th>
+          <th *ngIf="environment.isDev">Batch Exec</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row>
@@ -214,8 +262,25 @@
               />
             </div>
           </td>
+          <td *ngIf="environment.isDev">
+            <p-button 
+              label="Exec" 
+              severity="info"
+              size="small"
+              (onClick)="onBatchExec(row)"
+              pTooltip="Execute batch"
+            />
+          </td>
         </tr>
       </ng-template>
     </p-table>
   </section>
+
 </div>
+
+<!-- Batch Selection Dialog -->
+<app-batch-selection-dialog
+  [(visible)]="showBatchDialog"
+  [batchName]="currentBatchName"
+  (batchesSelected)="onBatchesSelected($event)"
+/>

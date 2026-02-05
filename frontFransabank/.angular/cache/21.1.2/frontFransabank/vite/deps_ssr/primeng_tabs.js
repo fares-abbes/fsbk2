@@ -2,25 +2,20 @@ import { createRequire } from 'module';const require = createRequire(import.meta
 import {
   Ripple,
   RippleModule
-} from "./chunk-BB76O7V3.js";
+} from "./chunk-7DHX5GZA.js";
 import {
   ChevronLeftIcon,
   ChevronRightIcon
-} from "./chunk-WV7ZYWZO.js";
+} from "./chunk-S2ZJEJTI.js";
 import {
   BaseComponent,
   BaseStyle,
   PARENT_INSTANCE
-} from "./chunk-D2LCM2PS.js";
+} from "./chunk-M5PWP76D.js";
 import {
   PrimeTemplate,
   SharedModule
-} from "./chunk-M7CUVRTM.js";
-import {
-  CommonModule,
-  NgTemplateOutlet,
-  isPlatformBrowser
-} from "./chunk-NRMQWTFC.js";
+} from "./chunk-XNJAOGMH.js";
 import {
   Bind,
   BindModule
@@ -36,6 +31,12 @@ import {
   v,
   z
 } from "./chunk-VNWCIP25.js";
+import {
+  CommonModule,
+  NgTemplateOutlet,
+  isPlatformBrowser
+} from "./chunk-KCLZITHO.js";
+import "./chunk-J4IONJRY.js";
 import {
   ChangeDetectionStrategy,
   Component,

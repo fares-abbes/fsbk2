@@ -7,7 +7,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +16,7 @@ import com.mss.unified.repositories.BatchesFFCRepository;
 import com.mss.unified.repositories.BatchesHistoryRepository;
 
 /**
- * Service responsible for syncing BatchesFC records to BatchesHistory.
- * Runs a scheduled job every minute to check for new or updated batches
- * and creates corresponding history records.
+ * Service for managing BatchesHistory records.
  */
 @Service
 public class batchHistoryService {
@@ -32,93 +29,13 @@ public class batchHistoryService {
     @Autowired
     private BatchesHistoryRepository batchesHistoryRepository;
 
-    /**
-     * Scheduled job that runs every minute to sync BatchesFC to BatchesHistory.
-     * Checks for new records in BatchesFC and creates history entries if they don't exist.
-     */
-    @Scheduled(cron = "0 * * * * *") // Every minute at second 0
-    @Transactional
-    public void syncBatchesToHistory() {
-        logger.info("Starting batch history sync job at {}", new Date());
-        
-        try {
-            List<BatchesFC> allBatches = batchesFCRepository.findAll();
-            int syncedCount = 0;
-            
-            for (BatchesFC batch : allBatches) {
-                if (shouldCreateHistoryRecord(batch)) {
-                    createHistoryRecord(batch);
-                    syncedCount++;
-                }
-            }
-            
-            if (syncedCount > 0) {
-                logger.info("Synced {} new batch records to history", syncedCount);
-            } else {
-                logger.debug("No new batch records to sync");
-            }
-            
-        } catch (Exception e) {
-            logger.error("Error during batch history sync: {}", e.getMessage(), e);
-        }
-        
-        logger.info("Batch history sync job completed at {}", new Date());
-    }
-
-    /**
-     * Determines if a history record should be created for the given batch.
-     * A record is created if no history exists for this batch with the same lastExecution date.
-     */
-    private boolean shouldCreateHistoryRecord(BatchesFC batch) {
-        if (batch.getBatchLastExcution() == null) {
-            return false;
-        }
-        
-        return !batchesHistoryRepository.existsByBatchIdAndLastExecution(
-                batch.getBatchId(), 
-                batch.getBatchLastExcution()
-        );
-    }
-
-    /**
-     * Creates a new BatchesHistory record from a BatchesFC record.
-     * Syncs: batchName, batchId (via relation), batchLastExecution, batchType
-     * Initializes: batchHStartDate, batchHEndDate, status, exception, erreur, bypassStatus
-     */
-    private void createHistoryRecord(BatchesFC batch) {
-        BatchesHistory history = new BatchesHistory();
-        
-        // Sync from BatchesFC
-        history.setBatchId(batch.getBatchId());
-        history.setBatchName(batch.getBatchName());
-        history.setBatchType(batch.getBatchType());
-        history.setBatchLastExecution(batch.getBatchLastExcution());
-        
-        // Set execution-specific data from BatchesFC
-        history.setBatchHStartDate(batch.getBatchDate());
-        history.setBatchHEndDate(batch.getBatchEndDate());
-        history.setStatus(0); // Default status: 0 (pending)
-        history.setErreur(batch.getError());
-        history.setException(batch.getErrorStackTrace());
-        history.setBypassStatus(0); // Default bypass status
-        
-        batchesHistoryRepository.save(history);
-        
-        logger.debug("Created history record for batch: {} (ID: {})", 
-                batch.getBatchName(), batch.getBatchId());
-    }
-
-    /**
-     * Manually trigger sync for a specific batch by its key.
-     * Useful for on-demand syncing.
-     */
     @Transactional
     public void syncBatchByKey(String key) {
-        batchesFCRepository.findByKey(key).ifPresent(batch -> {
-            if (shouldCreateHistoryRecord(batch)) {
-                createHistoryRecord(batch);
-                logger.info("Manually synced batch with key: {}", key);
-            }
+        batchesHistoryRepository.findByKeyfc(key).ifPresent(history -> {
+            history.setStatus(1);
+            history.setBatchHEndDate(new Date());
+            batchesHistoryRepository.save(history);
+            logger.info("Manually synced batch history with key: {}", key);
         });
     }
 
@@ -186,5 +103,30 @@ public class batchHistoryService {
 
         // Step 3: Get all batches after the last done batch but before today
         return batchesFCRepository.findBatchesAfterDateUntilYesterday(startDate, startOfToday);
+    }
+
+    /**
+     * Returns the list of BatchesHistory for a specific batchName from the last done BatchesHistory (status=1)
+     * for that batchName.
+     * Logic:
+     * 1. Find the last BatchesHistory where status = 1 and batchName matches
+     * 2. Get its batchDate
+     * 3. Get all BatchesHistory where batchName matches and batchDate is AFTER that date and status != 1
+     */
+    public List<BatchesHistory> getPendingBatchesSinceLastDoneForBatch(String batchName) {
+        // Step 1: Find the last done history for this batchName
+        List<BatchesHistory> doneHistories = batchesHistoryRepository.findTopByBatchNameAndStatusOrderByBatchDateDesc(batchName, 1);
+        
+        Date startDate;
+        if (doneHistories != null && !doneHistories.isEmpty()) {
+            BatchesHistory lastDoneHistory = doneHistories.get(0);
+            startDate = lastDoneHistory.getBatchDate();
+        } else {
+            // If no done history found, start from the earliest possible
+            startDate = new Date(0);
+        }
+
+        // Step 2: Get all BatchesHistory for this batchName after the last done history and status != 1
+        return batchesHistoryRepository.findByBatchNameAndBatchDateGreaterThan(batchName, startDate);
     }
 }

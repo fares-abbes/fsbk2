@@ -65,31 +65,51 @@ public class BatchExecController {
 
     /**
      * Create a BatchExec and immediately create batch histories for the date range.
+     * The batchName parameter specifies which batch type to create histories for.
+     * Valid batchNames: "Intergration file TP", "Intergration file TPM", "Intergration file VISA"
      * 
      * @param startDate Start date of the range (format: yyyy-MM-dd)
      * @param endDate End date of the range (format: yyyy-MM-dd)
+     * @param batchName The batch name to create histories for (from frontend)
      * @return Summary of created records
      */
     @PostMapping("createAndExecute")
     public ResponseEntity<?> createAndExecute(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+            @RequestParam String batchName) {
         try {
+            // Validate batchName
+            if (!isValidBatchName(batchName)) {
+                return ResponseEntity.badRequest()
+                        .body("Invalid batchName. Must be one of: 'Intergration file TP', 'Intergration file TPM', 'Intergration file VISA'");
+            }
+            
             // Create the BatchExec record
             BatchExec batchExec = batchExecService.createBatchExec(startDate, endDate);
             
-            // Create batch histories for the date range
-            List<BatchesHistory> createdHistories = batchExecService.createBatchHistoryFromDateRange(batchExec.getBatchExecId());
+            // Create batch histories for the date range with the specified batchName
+            List<BatchesHistory> createdHistories = batchExecService.createBatchHistoryFromDateRange(
+                    startDate, endDate, batchName);
             
             return ResponseEntity.ok()
-                    .body(String.format("Created BatchExec ID: %d and %d batch history records", 
-                            batchExec.getBatchExecId(), createdHistories.size()));
+                    .body(String.format("Created BatchExec ID: %d and %d batch history records for '%s'", 
+                            batchExec.getBatchExecId(), createdHistories.size(), batchName));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error creating BatchExec and histories: " + e.getMessage());
         }
+    }
+
+    /**
+     * Validates that the batchName is one of the allowed values.
+     */
+    private boolean isValidBatchName(String batchName) {
+        return "Intergration file TP".equals(batchName) ||
+               "Intergration file TPM".equals(batchName) ||
+               "Intergration file VISA".equals(batchName);
     }
 
     /**

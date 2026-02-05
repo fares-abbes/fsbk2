@@ -1,18 +1,35 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+import { DatePickerModule } from 'primeng/datepicker';
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
 import { IntegrationRow, Status } from '../types';
+import { BatchSelectionDialogComponent, BatchHistory } from '../components/batch-selection-dialog';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-tp-integration-page',
-  imports: [CommonModule, TableModule, ButtonModule, TagModule, TooltipModule],
+  imports: [CommonModule, TableModule, ButtonModule, TagModule, TooltipModule, BatchSelectionDialogComponent, DatePickerModule, FormsModule, InputTextModule],
   templateUrl: './tp-integration.html',
   styleUrl: './tp-integration.css'
 })
 export class TpIntegrationPage {
+  protected showBatchDialog = false;
+  protected currentIntegration: IntegrationRow | null = null;
+  protected currentBatchName = '';
+
+  // Dev mode properties
+  protected startDate: Date | null = null;
+  protected endDate: Date | null = null;
+  protected environment = environment;
+
+  constructor(private http: HttpClient) {}
+
   protected readonly nationalIntegrations: IntegrationRow[] = [
     {
       name: 'Integration Fichier TP',
@@ -25,12 +42,6 @@ export class TpIntegrationPage {
       status: 'Error',
       startDate: '14/01/2026 11:00',
       endDate: '-'
-    },
-    {
-      name: 'Integration Fichier TPE',
-      status: 'Pending',
-      startDate: '-',
-      endDate: '-'
     }
   ];
 
@@ -39,18 +50,6 @@ export class TpIntegrationPage {
       name: 'Integration VISA',
       status: 'Validating',
       startDate: '14/01/2026 09:30',
-      endDate: '-'
-    },
-    {
-      name: 'Integration Mastercard',
-      status: 'Done',
-      startDate: '14/01/2026 08:00',
-      endDate: '14/01/2026 08:45'
-    },
-    {
-      name: 'Integration SWIFT',
-      status: 'Pending',
-      startDate: '-',
       endDate: '-'
     }
   ];
@@ -113,10 +112,104 @@ export class TpIntegrationPage {
 
   protected onView(row: IntegrationRow): void {
     console.log('View details for:', row.name);
+    this.currentBatchName = this.getBatchNameForIntegration(row.name);
+    this.currentIntegration = row;
+    this.showBatchDialog = true;
+  }
+
+  private getBatchNameForIntegration(integrationName: string): string {
+    switch (integrationName) {
+      case 'Integration Fichier TP':
+        return 'Intergration file TP';
+      case 'Integration Fichier TPM':
+        return 'Intergration file TPM';
+      case 'Integration VISA':
+        return 'Intergration file VISA';
+      default:
+        return '';
+    }
+  }
+
+  protected onBatchesSelected(batches: BatchHistory[]): void {
+    console.log('Selected batches:', batches);
+    console.log('For integration:', this.currentIntegration?.name);
+    
+    if (!this.currentIntegration) return;
+
+    // Execute each selected batch
+    batches.forEach(batch => {
+      if (batch.key) {
+        this.executeBatch(batch.key, batch.batchName || 'Unknown');
+      }
+    });
+
+    // Update integration status
+    this.currentIntegration.status = 'Validating';
+    this.currentIntegration.startDate = this.formatDate(new Date());
+  }
+
+  private executeBatch(key: string, batchName: string): void {
+    console.log(`Executing batch: ${batchName} (key: ${key})`);
+    
+    this.http.post(`http://localhost:5000/BatchHistory/syncBatchByKey/${key}`, {})
+      .subscribe({
+        next: () => {
+          console.log(`Batch ${batchName} executed successfully`);
+          // Update integration status to Done after execution
+          if (this.currentIntegration) {
+            this.currentIntegration.status = 'Done';
+            this.currentIntegration.endDate = this.formatDate(new Date());
+          }
+        },
+        error: (err) => {
+          console.error(`Error executing batch ${batchName}:`, err);
+          // Update integration status to Error
+          if (this.currentIntegration) {
+            this.currentIntegration.status = 'Error';
+            this.currentIntegration.endDate = this.formatDate(new Date());
+          }
+        }
+      });
   }
 
   protected isStartDisabled(row: IntegrationRow): boolean {
     return row.status === 'Validating' || row.status === 'Done';
+  }
+
+  protected onBatchExec(row: IntegrationRow): void {
+    this.currentBatchName = this.getBatchNameForIntegration(row.name);
+    this.startDate = new Date();
+    this.endDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // Tomorrow
+    this.createAndExecute();
+  }
+
+  protected createAndExecute(): void {
+    if (!this.startDate || !this.endDate || !this.currentBatchName) {
+      alert('Please fill all fields');
+      return;
+    }
+
+    const params = {
+      startDate: this.formatDateForApi(this.startDate),
+      endDate: this.formatDateForApi(this.endDate),
+      batchName: this.currentBatchName
+    };
+
+    this.http.post('http://localhost:5000/batchExec/createAndExecute', null, { params })
+      .subscribe({
+        next: (response) => {
+          console.log('Batch created and executed:', response);
+          alert('Batch created and executed successfully');
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          alert('Error creating batch');
+        }
+      });
+  }
+
+  private formatDateForApi(date: Date): string {
+    return date.toISOString().split('T')[0];
   }
 
   private formatDate(date: Date): string {
