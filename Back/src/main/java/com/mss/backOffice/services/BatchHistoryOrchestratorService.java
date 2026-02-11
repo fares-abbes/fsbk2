@@ -2,8 +2,8 @@ package com.mss.backOffice.services;
 
 import com.mss.unified.entities.BatchesHistory;
 import com.mss.unified.repositories.BatchesHistoryRepository;
-import com.mss.backOffice.websocket.BatchHistoryWebSocketHandler;
 import com.mss.backOffice.websocket.BatchStatusUpdateMessage;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
@@ -37,7 +37,7 @@ public class BatchHistoryOrchestratorService {
     private BatchesHistoryRepository batchesHistoryRepository;
 
     @Autowired
-    private BatchHistoryWebSocketHandler webSocketHandler;
+    private SimpMessagingTemplate messagingTemplate;
 
     public ResponseEntity<?> processBatchHistories(List<Long> batchHIds) throws Exception {
         if (batchHIds == null || batchHIds.isEmpty()) {
@@ -54,8 +54,8 @@ public class BatchHistoryOrchestratorService {
                 // Set status to 0 (parsing started)
                 history.setStatus(0);
                 batchesHistoryRepository.save(history);
-                webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
-                    history.getBatchHId(), 0, history.getBatchName()));
+                messagingTemplate.convertAndSend("/topic/batch-status",
+                    new BatchStatusUpdateMessage(history.getBatchHId(), 0, history.getBatchName()));
 
                 String filePath = Paths.get(history.getFileLocation(), history.getFilename()).toString();
                 java.io.File file = new java.io.File(filePath);
@@ -63,8 +63,8 @@ public class BatchHistoryOrchestratorService {
                     // Set status to 2 (error)
                     history.setStatus(2);
                     batchesHistoryRepository.save(history);
-                    webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
-                        history.getBatchHId(), 2, history.getBatchName()));
+                    messagingTemplate.convertAndSend("/topic/batch-status",
+                        new BatchStatusUpdateMessage(history.getBatchHId(), 2, history.getBatchName()));
 
                     Map<String, Object> errorMap = new HashMap<>();
                     errorMap.put("batchHId", batchHId);
@@ -91,8 +91,8 @@ public class BatchHistoryOrchestratorService {
                     // Set status to 2 (error)
                     history.setStatus(2);
                     batchesHistoryRepository.save(history);
-                    webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
-                        history.getBatchHId(), 2, history.getBatchName()));
+                    messagingTemplate.convertAndSend("/topic/batch-status",
+                        new BatchStatusUpdateMessage(history.getBatchHId(), 2, history.getBatchName()));
 
                     Map<String, Object> errorMap = new HashMap<>();
                     errorMap.put("batchHId", batchHId);
@@ -103,8 +103,8 @@ public class BatchHistoryOrchestratorService {
                     // Set status to 3 (parsing completed)
                     history.setStatus(3);
                     batchesHistoryRepository.save(history);
-                    webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
-                        history.getBatchHId(), 3, history.getBatchName()));
+                    messagingTemplate.convertAndSend("/topic/batch-status",
+                        new BatchStatusUpdateMessage(history.getBatchHId(), 3, history.getBatchName()));
 
                     Map<String, Object> successMap = new HashMap<>();
                     successMap.put("batchHId", batchHId);
@@ -120,15 +120,15 @@ public class BatchHistoryOrchestratorService {
                     if (history != null) {
                         history.setStatus(2);
                         batchesHistoryRepository.save(history);
-                        webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
-                            history.getBatchHId(), 2, history.getBatchName()));
+                        messagingTemplate.convertAndSend("/topic/batch-status",
+                            new BatchStatusUpdateMessage(history.getBatchHId(), 2, history.getBatchName()));
                     }
                 } catch (Exception dbError) {
                     logger.error("Failed to update error status for batch history ID {} (DB may be unavailable): {}",
                         batchHId, dbError.getMessage());
                     // Still broadcast error via WebSocket even if DB update failed
-                    webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
-                        batchHId, 2, "Unknown"));
+                    messagingTemplate.convertAndSend("/topic/batch-status",
+                        new BatchStatusUpdateMessage(batchHId, 2, "Unknown"));
                 }
 
                 Map<String, Object> errorMap = new HashMap<>();

@@ -2,26 +2,26 @@ import {
   BaseComponent,
   BaseStyle,
   PARENT_INSTANCE
-} from "./chunk-USYU7AJS.js";
+} from "./chunk-XELMW7SS.js";
 import {
   Footer,
   Header,
   PrimeTemplate,
   SharedModule
-} from "./chunk-PYXFDVSW.js";
-import {
-  Bind,
-  BindModule
-} from "./chunk-NN34OGXM.js";
-import {
-  k2 as k
-} from "./chunk-DBGGI7FW.js";
+} from "./chunk-EWE62IZH.js";
 import {
   CommonModule,
   NgIf,
   NgTemplateOutlet
-} from "./chunk-MWDVN3PR.js";
-import "./chunk-TD4FI3JP.js";
+} from "./chunk-5KY72DXQ.js";
+import "./chunk-P7PDU75M.js";
+import {
+  Bind,
+  BindModule
+} from "./chunk-OUF7H7ZG.js";
+import {
+  k2 as k
+} from "./chunk-DBGGI7FW.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -61,8 +61,9 @@ import {
   ɵɵtemplate,
   ɵɵtext,
   ɵɵtextInterpolate
-} from "./chunk-RMG632KN.js";
-import "./chunk-PJVWDKLX.js";
+} from "./chunk-4PXMU5Z3.js";
+import "./chunk-RSS3ODKE.js";
+import "./chunk-H2SRQSE4.js";
 
 // node_modules/@primeuix/styles/dist/card/index.mjs
 var style = "\n    .p-card {\n        background: dt('card.background');\n        color: dt('card.color');\n        box-shadow: dt('card.shadow');\n        border-radius: dt('card.border.radius');\n        display: flex;\n        flex-direction: column;\n    }\n\n    .p-card-caption {\n        display: flex;\n        flex-direction: column;\n        gap: dt('card.caption.gap');\n    }\n\n    .p-card-body {\n        padding: dt('card.body.padding');\n        display: flex;\n        flex-direction: column;\n        gap: dt('card.body.gap');\n    }\n\n    .p-card-title {\n        font-size: dt('card.title.font.size');\n        font-weight: dt('card.title.font.weight');\n    }\n\n    .p-card-subtitle {\n        color: dt('card.subtitle.color');\n    }\n";

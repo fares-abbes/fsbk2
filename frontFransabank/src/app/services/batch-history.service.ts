@@ -1,6 +1,8 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import SockJS from 'sockjs-client';
+import * as Stomp from 'stompjs';
 import { BatchesHistory } from '../types';
 
 export interface BatchStatusUpdate {
@@ -17,9 +19,9 @@ export interface BatchStatusUpdate {
 })
 export class BatchHistoryService implements OnDestroy {
   private readonly BASE_URL = 'http://localhost:5000/BatchHistory';
-  private readonly WS_URL = 'ws://localhost:5000/ws/batch-history';
+  private readonly WS_URL = 'http://localhost:5000/ws';
 
-  private websocket: WebSocket | null = null;
+  private stompClient: any = null;
   private statusUpdates$ = new Subject<BatchStatusUpdate>();
   private connectionStatus$ = new BehaviorSubject<'connected' | 'disconnected' | 'connecting'>('disconnected');
 
@@ -54,10 +56,19 @@ export class BatchHistoryService implements OnDestroy {
     });
   }
 
-  // WebSocket Methods
+  deleteBatchHistory(batchHId: number): Observable<any> {
+    return this.http.delete(`${this.BASE_URL}/${batchHId}`, { responseType: 'text' });
+  }
+
+  // STOMP WebSocket Methods
   connectWebSocket(token: string): void {
-    if (this.websocket?.readyState === WebSocket.OPEN) {
-      console.log('WebSocket already connected');
+    // Guard: only connect in browser environment
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    if (this.stompClient?.connected) {
+      console.log('STOMP client already connected');
       return;
     }
 
@@ -65,53 +76,26 @@ export class BatchHistoryService implements OnDestroy {
     this.connectionStatus$.next('connecting');
 
     try {
-      const wsUrl = `${this.WS_URL}?token=${encodeURIComponent(token)}`;
-
-      // Create WebSocket outside Angular zone to avoid unnecessary change detection on every event
+      // Create WebSocket outside Angular zone to avoid unnecessary change detection
       this.ngZone.runOutsideAngular(() => {
-        this.websocket = new WebSocket(wsUrl);
+        const socket = new SockJS(this.WS_URL);
+        this.stompClient = Stomp.over(socket);
 
-        this.websocket.onopen = (event) => {
-          console.log('WebSocket connected', event);
-          this.ngZone.run(() => {
-            this.connectionStatus$.next('connected');
-          });
-          this.reconnectAttempts = 0;
-        };
+        // Connection headers with authentication token
+        const headers: any = {};
+        if (token && token !== 'development-no-auth') {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
 
-        this.websocket.onmessage = (event) => {
-          try {
-            const update: BatchStatusUpdate = JSON.parse(event.data);
-            console.log('Received status update:', update);
-            this.ngZone.run(() => {
-              this.statusUpdates$.next(update);
-            });
-          } catch (error) {
-            console.error('Error parsing WebSocket message:', error);
-          }
-        };
-
-        this.websocket.onerror = (error) => {
-          console.error('WebSocket error:', error);
-          this.ngZone.run(() => {
-            this.connectionStatus$.next('disconnected');
-          });
-        };
-
-        this.websocket.onclose = (event) => {
-          console.log('WebSocket disconnected', event);
-          this.ngZone.run(() => {
-            this.connectionStatus$.next('disconnected');
-          });
-
-          if (!this.intentionalDisconnect) {
-            this.attemptReconnect(token);
-          }
-        };
+        this.stompClient.connect(
+          headers,
+          (frame: any) => this.onConnect(frame),
+          (error: any) => this.onError(error)
+        );
       });
 
     } catch (error) {
-      console.error('Error creating WebSocket:', error);
+      console.error('Error creating STOMP client:', error);
       this.connectionStatus$.next('disconnected');
       if (!this.intentionalDisconnect) {
         this.attemptReconnect(token);
@@ -119,13 +103,51 @@ export class BatchHistoryService implements OnDestroy {
     }
   }
 
+  private onConnect(frame: any): void {
+    this.ngZone.run(() => {
+      console.log('STOMP Connected:', frame);
+      this.connectionStatus$.next('connected');
+    });
+
+    this.reconnectAttempts = 0;
+
+    // Subscribe to batch status updates
+    this.ngZone.runOutsideAngular(() => {
+      this.stompClient.subscribe('/topic/batch-status', (message: any) => {
+        try {
+          const update: BatchStatusUpdate = JSON.parse(message.body);
+          console.log('Received STOMP status update:', update);
+          this.ngZone.run(() => {
+            this.statusUpdates$.next(update);
+          });
+        } catch (error) {
+          console.error('Error parsing STOMP message:', error);
+        }
+      });
+    });
+  }
+
+  private onError(error: any): void {
+    console.error('STOMP Error:', error);
+    this.ngZone.run(() => {
+      this.connectionStatus$.next('disconnected');
+    });
+
+    if (!this.intentionalDisconnect) {
+      this.attemptReconnect(localStorage.getItem('wsToken') || 'development-no-auth');
+    }
+  }
+
   disconnectWebSocket(): void {
     this.intentionalDisconnect = true;
 
-    if (this.websocket) {
-      console.log('Disconnecting WebSocket');
-      this.websocket.close();
-      this.websocket = null;
+    if (this.stompClient?.connected) {
+      console.log('Disconnecting STOMP client');
+      this.stompClient.disconnect(() => {
+        this.ngZone.run(() => {
+          this.connectionStatus$.next('disconnected');
+        });
+      });
     }
 
     if (this.reconnectTimer) {
@@ -142,12 +164,18 @@ export class BatchHistoryService implements OnDestroy {
     }
 
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      console.error('Max reconnect attempts reached');
+      console.error('Max STOMP reconnect attempts reached');
+      this.ngZone.run(() => {
+        this.statusUpdates$.next({
+          type: 'STATUS_UPDATE',
+          message: 'Failed to connect to server. Please refresh the page.'
+        });
+      });
       return;
     }
 
     this.reconnectAttempts++;
-    console.log(`Attempting reconnect ${this.reconnectAttempts}/${this.maxReconnectAttempts} in ${this.reconnectInterval}ms`);
+    console.log(`Attempting STOMP reconnect ${this.reconnectAttempts}/${this.maxReconnectAttempts} in ${this.reconnectInterval}ms`);
 
     this.reconnectTimer = setTimeout(() => {
       this.connectWebSocket(token);
@@ -161,13 +189,6 @@ export class BatchHistoryService implements OnDestroy {
 
   getConnectionStatus(): Observable<'connected' | 'disconnected' | 'connecting'> {
     return this.connectionStatus$.asObservable();
-  }
-
-  // Send ping to keep connection alive (optional)
-  sendPing(): void {
-    if (this.websocket?.readyState === WebSocket.OPEN) {
-      this.websocket.send('ping');
-    }
   }
 
   ngOnDestroy(): void {

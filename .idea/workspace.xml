@@ -5,36 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b3a1ed7-90ee-48c7-92a3-19e6ddec5b3e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back/MVN_BUILD.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/Back/MVN_BUILD.cmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Back/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/BackOfficeApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/BackOfficeApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/config/BatchConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/config/BatchConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/config/WebSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/config/WebSocketConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/controller/BatchHistoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/controller/BatchHistoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/controller/FileRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/controller/FileRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/security/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/services/BatchExecService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/services/BatchExecService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/services/BatchHistoryOrchestratorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/services/BatchHistoryOrchestratorService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/services/batchHistoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/services/batchHistoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Back/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/websocket/BatchHistoryWebSocketHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Back/src/main/java/com/mss/backOffice/websocket/WebSocketHandshakeInterceptor.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Back/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Back/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Back/target/classes/com/mss/backOffice/BackOfficeApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/Back/target/classes/com/mss/backOffice/BackOfficeApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back/target/classes/com/mss/backOffice/controller/FileRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/Back/target/classes/com/mss/backOffice/controller/FileRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Back/target/classes/com/mss/backOffice/security/WebSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/Back/target/classes/com/mss/backOffice/security/WebSecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Entity/build.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/Entity/build.cmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Entity/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Entity/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Entity/src/main/java/com/mss/unified/entities/FileContentT.java" beforeDir="false" afterPath="$PROJECT_DIR$/Entity/src/main/java/com/mss/unified/entities/FileContentT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Entity/src/main/java/com/mss/unified/entities/FileContentTP.java" beforeDir="false" afterPath="$PROJECT_DIR$/Entity/src/main/java/com/mss/unified/entities/FileContentTP.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Entity/src/main/java/com/mss/unified/entities/batchesHistory.java" beforeDir="false" afterPath="$PROJECT_DIR$/Entity/src/main/java/com/mss/unified/entities/batchesHistory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Entity/src/main/java/com/mss/unified/repositories/BatchesHistoryRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Entity/src/main/java/com/mss/unified/repositories/BatchesHistoryRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backendTest/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backendTest/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backendTest/src/main/java/org/example/backendtest/BackendTestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backendTest/src/main/java/org/example/backendtest/BackendTestApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backendTest/src/main/java/org/example/backendtest/entity/Batch.java" beforeDir="false" afterPath="$PROJECT_DIR$/backendTest/src/main/java/org/example/backendtest/entity/Batch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backendTest/src/main/java/org/example/backendtest/entity/BatchesFc.java" beforeDir="false" afterPath="$PROJECT_DIR$/backendTest/src/main/java/org/example/backendtest/entity/BatchesFc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backendTest/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backendTest/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backendTest/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backendTest/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Entity/src/main/java/com/mss/unified/repositories/FileContentTPRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/Entity/src/main/java/com/mss/unified/repositories/FileContentTPRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/.tsbuildinfo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/@angular_common.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/@angular_common_http.js" afterDir="false" />
@@ -44,46 +25,48 @@
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/@angular_router.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/@angular_router.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/@angular_router.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-43PT54QS.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-43PT54QS.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-44AUBNPP.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-44AUBNPP.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-64JGTGFH.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-64JGTGFH.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-7TBAKADB.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-7TBAKADB.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-ANE3HKAR.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-ANE3HKAR.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-CNRSGKGO.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-CNRSGKGO.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-EXZZPBF3.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-EXZZPBF3.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-FWL3V6SZ.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-FWL3V6SZ.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-H7ATFKEE.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-H7ATFKEE.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-IG5Y2RHW.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-IG5Y2RHW.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-ISIAMQ5U.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-ISIAMQ5U.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-JR4O3XZK.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-JR4O3XZK.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-L4RYDCAU.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-L4RYDCAU.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-LBKHDNEL.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-LBKHDNEL.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-MV5Y7WP5.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-MV5Y7WP5.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-MYQMCT6B.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-MYQMCT6B.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-S3QZGXVX.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-S3QZGXVX.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-SBJFXLLR.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-SBJFXLLR.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-TVTHNNOY.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-TVTHNNOY.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-VFMBNQ6T.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-VFMBNQ6T.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-2BUGKHL2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-2BUGKHL2.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-2FHYKT6I.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-2FHYKT6I.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-2PSETWXU.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-2PSETWXU.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-465BX23T.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-465BX23T.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-5ENFOKIQ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-5ENFOKIQ.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-5X5BLHJK.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-5X5BLHJK.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-BPNHPI44.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-BPNHPI44.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-DCTRX24Q.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-DCTRX24Q.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-H6ZPW4QN.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-H6ZPW4QN.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-HEMUX7U2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-HEMUX7U2.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-MWDVN3PR.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-MWDVN3PR.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-NN34OGXM.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-NN34OGXM.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-PJVWDKLX.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-PJVWDKLX.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-PYXFDVSW.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-PYXFDVSW.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-RMG632KN.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-RMG632KN.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-RS6ATHVM.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-RS6ATHVM.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-RW4DRVLU.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-RW4DRVLU.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-TD4FI3JP.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-TD4FI3JP.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-UG7NG24F.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-UG7NG24F.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-USYU7AJS.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-USYU7AJS.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-V5YM5QAZ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/chunk-V5YM5QAZ.js.map" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_api.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_api.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_bind.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_bind.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_button.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_button.js" afterDir="false" />
@@ -101,79 +84,37 @@
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_tag.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_tag.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_tag.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_tag.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_tooltip.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/primeng_tooltip.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_common_http.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_core.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_forms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/rxjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps/rxjs.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_platform-browser.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_router.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_ssr.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_ssr.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_ssr_node.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_ssr_node.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_ssr_node.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/@angular_ssr_node.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-3FNJGRDI.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-3FNJGRDI.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-4M7HXTCW.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-4M7HXTCW.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-5LMCDDYT.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-5LMCDDYT.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-7DHX5GZA.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-7DHX5GZA.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-D57HZGZV.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-D57HZGZV.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-J4IONJRY.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-J4IONJRY.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-KCLZITHO.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-KCLZITHO.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-M5PWP76D.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-M5PWP76D.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-NOI5ZXM6.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-NOI5ZXM6.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-OEN2L32I.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-OEN2L32I.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-OZAUQKZI.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-OZAUQKZI.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-PJPXKXR6.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-PJPXKXR6.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-QZ7NVDNC.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-QZ7NVDNC.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-S2ZJEJTI.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-S2ZJEJTI.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-UQAS6VQ6.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-UQAS6VQ6.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-V3WWMEIX.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-V3WWMEIX.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-VSZ2EYKI.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-VSZ2EYKI.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-XISZLTWW.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-XISZLTWW.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-XNJAOGMH.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-XNJAOGMH.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-Y645XXIU.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-Y645XXIU.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-ZDXZ7PE3.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-ZDXZ7PE3.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_api.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_bind.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_bind.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-CE4TWH46.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-CE4TWH46.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-CGEVNCB7.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-CGEVNCB7.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-HU6UDVF5.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-HU6UDVF5.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-MLAW7CAC.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-MLAW7CAC.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-UV4RWLIY.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/chunk-UV4RWLIY.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/express.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/express.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/express.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/express.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_button.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_button.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_card.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_card.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_card.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_card.js.map" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_datepicker.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_datepicker.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_dialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_dialog.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_dialog.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_dialog.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_inputtext.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_inputtext.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_scroller.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_scroller.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_table.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_table.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_table.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_table.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_tabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_tabs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_tabs.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_tabs.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_tag.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_tag.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_tag.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_tag.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_tooltip.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/.angular/cache/21.1.2/frontFransabank/vite/deps_ssr/primeng_tooltip.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/src/app/app.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/src/app/app.routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/src/app/pages/tp-integration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/src/app/pages/tp-integration.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontFransabank/src/app/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/src/app/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/src/app/components/batches-history-list/batches-history-list.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/src/app/components/batches-history-list/batches-history-list.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/src/app/components/batches-history-list/batches-history-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/src/app/components/batches-history-list/batches-history-list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/src/app/components/batches-history-list/batches-history-list.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/src/app/components/batches-history-list/batches-history-list.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/src/app/pages/batches-history/batches-history.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/src/app/pages/batches-history/batches-history.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/src/app/services/batch-history.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/src/app/services/batch-history.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontFransabank/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontFransabank/src/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

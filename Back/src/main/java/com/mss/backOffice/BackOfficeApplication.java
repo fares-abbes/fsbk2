@@ -3,7 +3,6 @@ package com.mss.backOffice;
 
 
 import com.mss.backOffice.config.*;
-import com.mss.backOffice.config.WebSocketConfig;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 
 import org.springframework.boot.SpringApplication;

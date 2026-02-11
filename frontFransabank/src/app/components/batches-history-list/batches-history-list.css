@@ -48,3 +48,32 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* Make table more compact */
+:host ::ng-deep {
+  .p-datatable-sm {
+    font-size: 0.55rem;
+  }
+
+  .p-datatable-sm .p-datatable-thead > tr > th {
+    padding: 0.15rem;
+  }
+
+  .p-datatable-sm .p-datatable-tbody > tr > td {
+    padding: 0.1rem;
+  }
+
+  .p-datatable-sm .p-datatable-tbody > tr {
+    height: auto;
+  }
+
+  .p-tag {
+    font-size: 0.5rem;
+    padding: 0.1rem 0.2rem !important;
+  }
+
+  .p-button.p-button-sm {
+    padding: 0.1rem 0.2rem !important;
+    font-size: 0.5rem;
+  }
+}

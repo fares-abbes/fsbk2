@@ -1,18 +1,22 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, NgZone, ChangeDetectorRef, ChangeDetectionStrategy, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { CardModule } from 'primeng/card';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { BatchesHistory } from '../../types';
 import { BatchHistoryService, BatchStatusUpdate } from '../../services/batch-history.service';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-batches-history-list',
-  imports: [CommonModule, TableModule, ButtonModule, TagModule, CardModule],
+  imports: [CommonModule, TableModule, ButtonModule, TagModule, CardModule, ConfirmDialogModule],
+  providers: [ConfirmationService],
   templateUrl: './batches-history-list.html',
   styleUrl: './batches-history-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BatchesHistoryList implements OnInit, OnDestroy {
   protected batchesHistory: BatchesHistory[] = [];
@@ -23,17 +27,31 @@ export class BatchesHistoryList implements OnInit, OnDestroy {
   private statusUpdateSubscription?: Subscription;
   private connectionStatusSubscription?: Subscription;
 
-  constructor(private batchHistoryService: BatchHistoryService) {}
+  private isBrowser: boolean;
+
+  constructor(
+    private batchHistoryService: BatchHistoryService,
+    private confirmationService: ConfirmationService,
+    private ngZone: NgZone,
+    private changeDetectorRef: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   ngOnInit(): void {
     this.loadBatchesHistory();
-    this.connectToWebSocket();
-    this.subscribeToStatusUpdates();
-    this.subscribeToConnectionStatus();
+    if (this.isBrowser) {
+      this.connectToWebSocket();
+      this.subscribeToStatusUpdates();
+      this.subscribeToConnectionStatus();
+    }
   }
 
   ngOnDestroy(): void {
-    this.batchHistoryService.disconnectWebSocket();
+    if (this.isBrowser) {
+      this.batchHistoryService.disconnectWebSocket();
+    }
     this.statusUpdateSubscription?.unsubscribe();
     this.connectionStatusSubscription?.unsubscribe();
   }
@@ -47,11 +65,13 @@ export class BatchesHistoryList implements OnInit, OnDestroy {
         next: (data) => {
           this.batchesHistory = data;
           this.loading = false;
+          this.changeDetectorRef.markForCheck();
         },
         error: (err) => {
           console.error('Error loading batches history:', err);
           this.error = 'Failed to load batches history. Please try again.';
           this.loading = false;
+          this.changeDetectorRef.markForCheck();
         }
       });
   }
@@ -71,6 +91,7 @@ export class BatchesHistoryList implements OnInit, OnDestroy {
         next: (update: BatchStatusUpdate) => {
           if (update.type === 'STATUS_UPDATE' && update.batchHId) {
             this.updateBatchStatus(update.batchHId, update.status!);
+            this.changeDetectorRef.detectChanges();
           }
         },
         error: (err) => {
@@ -84,6 +105,7 @@ export class BatchesHistoryList implements OnInit, OnDestroy {
       .subscribe({
         next: (status) => {
           this.wsStatus = status;
+          this.changeDetectorRef.detectChanges();
           console.log('WebSocket status:', status);
         }
       });
@@ -161,5 +183,31 @@ export class BatchesHistoryList implements OnInit, OnDestroy {
       case 'disconnected': return 'Disconnected';
       default: return 'Unknown';
     }
+  }
+
+  protected confirmDelete(batch: BatchesHistory): void {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete batch history #${batch.batchHId} and all its parsed TP records?`,
+      header: 'Confirm Deletion',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'p-button-danger',
+      accept: () => {
+        this.deleteBatch(batch.batchHId);
+      }
+    });
+  }
+
+  private deleteBatch(batchHId: number): void {
+    this.batchHistoryService.deleteBatchHistory(batchHId).subscribe({
+      next: () => {
+        this.batchesHistory = this.batchesHistory.filter(b => b.batchHId !== batchHId);
+        this.changeDetectorRef.markForCheck();
+      },
+      error: (err) => {
+        console.error('Error deleting batch history:', err);
+        this.error = 'Failed to delete batch history. Please try again.';
+        this.changeDetectorRef.markForCheck();
+      }
+    });
   }
 }

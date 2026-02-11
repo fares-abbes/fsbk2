@@ -54,6 +54,7 @@
           <th>End Date</th>
           <th>Batch Date</th>
           <th>File Name</th>
+          <th>Actions</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-batch>
@@ -69,7 +70,16 @@
           <td class="date-cell">{{ formatDate(batch.batchHEndDate) }}</td>
           <td class="date-cell">{{ formatDate(batch.batchDate) }}</td>
           <td>{{ batch.filename || '-' }}</td>
-         
+          <td>
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [text]="true"
+              [rounded]="true"
+              size="small"
+              (onClick)="confirmDelete(batch)"
+            />
+          </td>
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">
@@ -83,3 +93,5 @@
     </p-table>
   }
 </p-card>
+
+<p-confirmDialog />

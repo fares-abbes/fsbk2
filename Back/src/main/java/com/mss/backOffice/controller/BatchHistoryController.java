@@ -97,4 +97,11 @@ public class BatchHistoryController {
         batchHistoryService.updateStatus(historyId, status);
     }
 
+    @DeleteMapping("/{batchHId}")
+    @Operation(summary = "Delete a batch history record and its parsed TP records")
+    public ResponseEntity<?> deleteBatchHistory(@PathVariable Long batchHId) {
+        batchHistoryService.deleteBatchHistory(batchHId);
+        return ResponseEntity.ok().body("Batch history deleted successfully");
+    }
+
 }

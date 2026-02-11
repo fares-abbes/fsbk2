@@ -1,48 +1,82 @@
 package com.mss.backOffice.config;
 
-import com.mss.backOffice.websocket.BatchHistoryWebSocketHandler;
-import com.mss.backOffice.websocket.WebSocketHandshakeInterceptor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
-import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-import javax.annotation.PostConstruct;
-
+/**
+ * STOMP WebSocket Configuration with SimpleBroker for development.
+ *
+ * This configuration uses STOMP (Simplified Message-Oriented Text Protocol) for real-time messaging.
+ * SimpleBroker is suitable for single-server deployments. For multi-server deployments, switch to
+ * Redis or RabbitMQ message broker.
+ *
+ * STOMP Destinations:
+ * - /topic/* : Server-to-client broadcast topics (public)
+ * - /queue/* : Server-to-client unicast queues (private per user)
+ * - /app/* : Client-to-server message endpoints (request mapping)
+ *
+ * Best Practices Applied:
+ * - Separated application prefixes (/app) from broker topics (/topic, /queue)
+ * - SockJS fallback for browsers without WebSocket support
+ * - CORS enabled for development (restrict in production)
+ * - SimpleBroker for development, easily switchable to RabbitMQ/Redis for production
+ */
 @Configuration
-@EnableWebSocket
-public class WebSocketConfig implements WebSocketConfigurer {
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketConfig.class);
 
-    @Autowired
-    private BatchHistoryWebSocketHandler batchHistoryWebSocketHandler;
-
-    @Autowired
-    private WebSocketHandshakeInterceptor handshakeInterceptor;
-
-    @PostConstruct
-    public void init() {
+    /**
+     * Configure the message broker for relay and destination prefixes.
+     */
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
         logger.info("===================================================");
-        logger.info("WebSocketConfig is being initialized!");
-        logger.info("BatchHistoryWebSocketHandler: {}", batchHistoryWebSocketHandler != null ? "INJECTED" : "NULL");
-        logger.info("WebSocketHandshakeInterceptor: {}", handshakeInterceptor != null ? "INJECTED" : "NULL");
+        logger.info("Configuring STOMP Message Broker");
+        logger.info("===================================================");
+
+        // Enable simple in-memory message broker
+        // For production with multiple servers, use:
+        // config.enableRabbitMqBroker("/topic", "/queue");
+        // or
+        // config.enableRedisMessageBroker("/topic", "/queue");
+        config.enableSimpleBroker("/topic", "/queue");
+
+        // Set the prefix for application-handled destination messages
+        // Messages to destinations starting with /app will be routed to @MessageMapping methods
+        config.setApplicationDestinationPrefixes("/app");
+
+        // Set the prefix for user-specific destination messages
+        // Used for point-to-point messaging (e.g., /user/queue/reply-to)
+        config.setUserDestinationPrefix("/user");
+
+        logger.info("Message broker configured: SimpleBroker with destinations /topic, /queue");
         logger.info("===================================================");
     }
 
+    /**
+     * Register WebSocket STOMP endpoints.
+     * Clients connect to /ws endpoint and upgrade to STOMP protocol.
+     */
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
         logger.info("===================================================");
-        logger.info("Registering WebSocket handler at /ws/batch-history");
+        logger.info("Registering STOMP endpoints");
         logger.info("===================================================");
 
-        registry.addHandler(batchHistoryWebSocketHandler, "/ws/batch-history")
-                .addInterceptors(handshakeInterceptor)
-                .setAllowedOrigins("*"); // Allow all origins for development
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins("*")  // In production, restrict to specific origins
+                .withSockJS()             // Enable SockJS fallback for older browsers
+                .setSessionCookieNeeded(false);  // Avoid session cookie issues
 
-        logger.info("WebSocket handler registration completed!");
+        logger.info("STOMP endpoint registered at /ws with SockJS fallback");
+        logger.info("===================================================");
     }
 }
+

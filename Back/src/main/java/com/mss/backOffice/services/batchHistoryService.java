@@ -15,8 +15,9 @@ import com.mss.unified.entities.BatchesFC;
 import com.mss.unified.entities.BatchesHistory;
 import com.mss.unified.repositories.BatchesFFCRepository;
 import com.mss.unified.repositories.BatchesHistoryRepository;
-import com.mss.backOffice.websocket.BatchHistoryWebSocketHandler;
+import com.mss.unified.repositories.FileContentTPRepository;
 import com.mss.backOffice.websocket.BatchStatusUpdateMessage;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 /**
  * Service for managing BatchesHistory records.
@@ -33,7 +34,10 @@ public class batchHistoryService {
     private BatchesHistoryRepository batchesHistoryRepository;
 
     @Autowired
-    private BatchHistoryWebSocketHandler webSocketHandler;
+    private FileContentTPRepository fileContentTPRepository;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @Transactional
     public void syncBatchByKey(String key) {
@@ -43,13 +47,13 @@ public class batchHistoryService {
             batchesHistoryRepository.save(history);
             logger.info("Manually synced batch history with key: {}", key);
 
-            // Broadcast status update via WebSocket
+            // Broadcast status update via WebSocket STOMP
             BatchStatusUpdateMessage message = new BatchStatusUpdateMessage(
                 history.getBatchHId(),
                 1,
                 history.getBatchName()
             );
-            webSocketHandler.broadcastStatusUpdate(message);
+            messagingTemplate.convertAndSend("/topic/batch-status", message);
         });
     }
 
@@ -155,14 +159,24 @@ public class batchHistoryService {
             batchesHistoryRepository.save(history);
             logger.info("Updated status to {} for batch history ID: {}", status, historyId);
 
-            // Broadcast status update via WebSocket
+            // Broadcast status update via WebSocket STOMP
             BatchStatusUpdateMessage message = new BatchStatusUpdateMessage(
                 history.getBatchHId(),
                 status,
                 history.getBatchName()
             );
-            logger.info("Broadcasting to {} active WebSocket sessions", webSocketHandler.getActiveSessionCount());
-            webSocketHandler.broadcastStatusUpdate(message);
+            messagingTemplate.convertAndSend("/topic/batch-status", message);
+            logger.info("Broadcasted status update for batch {}", history.getBatchHId());
         });
+    }
+
+    /**
+     * Delete a batch history record and its associated parsed TP records
+     */
+    @Transactional
+    public void deleteBatchHistory(Long batchHId) {
+        fileContentTPRepository.deleteByBatchHistoryId(batchHId);
+        batchesHistoryRepository.deleteById(batchHId);
+        logger.info("Deleted batch history ID: {} and its parsed TP records", batchHId);
     }
 }
