@@ -1,6 +1,7 @@
 package com.mss.backOffice.config;
 
 import com.mss.unified.entities.Account;
+import com.mss.unified.entities.BatchesHistory;
 import com.mss.unified.entities.Card;
 import com.mss.unified.entities.FileContentTP;
 import com.mss.unified.repositories.CardRepository;
@@ -11,13 +12,16 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.mapping.PassThroughLineMapper;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.mapping.FieldSetMapper;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.item.file.transform.FieldSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -46,14 +50,31 @@ public class BatchConfig {
     private AccountRepository accountRepository;
 
     @Bean
+    @StepScope
     public FlatFileItemReader<String> reader(@Value("#{jobParameters['filePath']}") String filePath) {
         FlatFileItemReader<String> reader = new FlatFileItemReader<>();
         reader.setResource(new FileSystemResource(filePath));
-        reader.setLineMapper(new PassThroughLineMapper());
+        reader.setEncoding("ISO-8859-1");
+        reader.setLinesToSkip(0); // assuming no header
+
+        DefaultLineMapper<String> lineMapper = new DefaultLineMapper<>();
+        lineMapper.setLineTokenizer(new DelimitedLineTokenizer() {{
+            setDelimiter("\n"); // treat whole line as one field
+            setNames("line");
+        }});
+        lineMapper.setFieldSetMapper(new FieldSetMapper<String>() {
+            @Override
+            public String mapFieldSet(FieldSet fieldSet) throws org.springframework.validation.BindException {
+                return fieldSet.readString("line");
+            }
+        });
+        reader.setLineMapper(lineMapper);
+
         return reader;
     }
 
     @Bean
+    @StepScope
     public ItemProcessor<String, FileContentTP> processor(@Value("#{jobParameters['idHeader']}") String idHeader) {
         return line -> {
             FileContentTP fileContent = new FileContentTP();
@@ -126,8 +147,13 @@ public class BatchConfig {
                 fileContent.setRufpaiement(safeSub(line, 508, 526).trim());
             }
 
-            fileContent.setIdHeder(idHeader);
             fileContent.setStatus("NEW"); // or whatever status
+
+            // Set the batch history
+            BatchesHistory batchHistory = new BatchesHistory();
+            batchHistory.setBatchHId(Long.valueOf(idHeader));
+            fileContent.setBatchHistory(batchHistory);
+
             return fileContent;
         };
     }
@@ -138,11 +164,14 @@ public class BatchConfig {
     }
 
     @Bean
-    public RepositoryItemWriter<FileContentTP> writer() {
-        RepositoryItemWriter<FileContentTP> writer = new RepositoryItemWriter<>();
-        writer.setRepository(fileContentTPRepository);
-        writer.setMethodName("save");
-        return writer;
+    @StepScope
+    public ItemWriter<FileContentTP> writer(@Value("#{jobParameters['idHeader']}") String idHeader) {
+        return items -> {
+            for (FileContentTP item : items) {
+                // idHeder is already set in processor
+            }
+            fileContentTPRepository.saveAll(items);
+        };
     }
 
     @Bean

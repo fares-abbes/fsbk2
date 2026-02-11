@@ -178,8 +178,6 @@ export class TpIntegrationPage {
 
   protected onBatchExec(row: IntegrationRow): void {
     this.currentBatchName = this.getBatchNameForIntegration(row.name);
-    this.startDate = new Date();
-    this.endDate = new Date(Date.now() + 24 * 60 * 60 * 1000); // Tomorrow
     this.createAndExecute();
   }
 

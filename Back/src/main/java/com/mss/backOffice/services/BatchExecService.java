@@ -1,5 +1,6 @@
 package com.mss.backOffice.services;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -251,13 +252,18 @@ public class BatchExecService {
         history.setSelectedEndDate(selectedEndDate);
         
         // Initialize status and other fields
-        history.setStatus(3); // Default status: pending
+        history.setStatus(-1); // Default status: pending
         history.setErreur(batchesFC.getError());
         history.setException(batchesFC.getErrorStackTrace());
         history.setBypassStatus(0); // Default bypass status
         history.setKeyfc(batchesFC.getKey());
         history.setFileLocation(batchesFC.getFileLocation());
-      
+        
+        // Generate filename as TP + YYMMDD + .txt
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
+        String yymmdd = sdf.format(currentDate);
+        history.setFilename(batchesFC.getKey() + yymmdd + ".txt");
+        
         // createdAt will be set automatically by @PrePersist to current timestamp
         
         batchesHistoryRepository.save(history);

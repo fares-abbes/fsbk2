@@ -1,0 +1,85 @@
+<p-card header="Batches History" styleClass="batches-history-card">
+  <ng-template pTemplate="header">
+    <div class="card-header">
+      <i class="pi pi-history" style="margin-right: 0.5rem;"></i>
+      <span>Batches History</span>
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 1rem;">
+        <!-- WebSocket Status Indicator -->
+        <div class="flex align-items-center gap-2" style="display: flex; align-items: center; gap: 0.5rem;">
+          <i class="pi pi-circle-fill" [style.color]="getWsStatusColor()"></i>
+          <span class="text-sm" style="font-size: 0.875rem;">{{ getWsStatusLabel() }}</span>
+        </div>
+        <p-button
+          icon="pi pi-refresh"
+          severity="secondary"
+          size="small"
+          [loading]="loading"
+          (onClick)="refresh()"
+        />
+      </div>
+    </div>
+  </ng-template>
+
+  @if (loading) {
+    <div class="loading-container">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem;"></i>
+      <p>Loading batches history...</p>
+    </div>
+  } @else if (error) {
+    <div class="error-container">
+      <i class="pi pi-exclamation-triangle" style="font-size: 2rem; color: var(--red-500);"></i>
+      <p>{{ error }}</p>
+      <p-button
+        label="Retry"
+        icon="pi pi-refresh"
+        severity="secondary"
+        size="small"
+        (onClick)="refresh()"
+      />
+    </div>
+  } @else {
+    <p-table
+      [value]="batchesHistory"
+      [tableStyle]="{ 'min-width': '80rem' }"
+      styleClass="p-datatable-sm"
+      [rowHover]="true"
+      [scrollable]="true"
+      scrollHeight="600px"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Batch Date</th>
+          <th>File Name</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-batch>
+        <tr>
+          <td>{{ batch.batchHId }}</td>
+          <td>
+            <p-tag
+              [value]="getStatusLabel(batch.status)"
+              [severity]="getStatusSeverity(batch.status)"
+            />
+          </td>
+          <td class="date-cell">{{ formatDate(batch.batchHStartDate) }}</td>
+          <td class="date-cell">{{ formatDate(batch.batchHEndDate) }}</td>
+          <td class="date-cell">{{ formatDate(batch.batchDate) }}</td>
+          <td>{{ batch.filename || '-' }}</td>
+         
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="9" style="text-align: center; padding: 2rem;">
+            <i class="pi pi-inbox" style="font-size: 3rem; color: var(--text-color-secondary);"></i>
+            <p style="margin-top: 1rem;">No batches history found</p>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+</p-card>

@@ -3,17 +3,17 @@ import {
   BaseComponent,
   BaseStyle,
   PARENT_INSTANCE
-} from "./chunk-M5PWP76D.js";
+} from "./chunk-NHQSPULW.js";
 import {
   Footer,
   Header,
   PrimeTemplate,
   SharedModule
-} from "./chunk-XNJAOGMH.js";
+} from "./chunk-4JX3FQFL.js";
 import {
   Bind,
   BindModule
-} from "./chunk-PJPXKXR6.js";
+} from "./chunk-5WFD3CMS.js";
 import {
   k2 as k
 } from "./chunk-VNWCIP25.js";
@@ -21,8 +21,8 @@ import {
   CommonModule,
   NgIf,
   NgTemplateOutlet
-} from "./chunk-KCLZITHO.js";
-import "./chunk-J4IONJRY.js";
+} from "./chunk-K4GY4LLX.js";
+import "./chunk-BB6KWQRO.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -62,7 +62,8 @@ import {
   ɵɵtemplate,
   ɵɵtext,
   ɵɵtextInterpolate
-} from "./chunk-OEN2L32I.js";
+} from "./chunk-KF2QZN3H.js";
+import "./chunk-O5J3CNTX.js";
 import "./chunk-6DU2HRTW.js";
 
 // node_modules/@primeuix/styles/dist/card/index.mjs

@@ -1,40 +1,31 @@
 package com.mss.backOffice.services;
 
-import com.mss.backOffice.request.AddFileRequest;
-import com.mss.unified.entities.FileHeaderT;
-import com.mss.unified.repositories.FileTRepository;
-import com.mss.unified.repositories.CodeBankBCRepository;
-import com.mss.unified.repositories.FileContentTPRepository;
+import com.mss.unified.entities.BatchesHistory;
+import com.mss.unified.repositories.BatchesHistoryRepository;
+import com.mss.backOffice.websocket.BatchHistoryWebSocketHandler;
+import com.mss.backOffice.websocket.BatchStatusUpdateMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
-@RestController
+@Service
 public class BatchHistoryOrchestratorService {
 
-    @Autowired
-    private FileTRepository fileSummaryTRepository;
-
-    @Autowired
-    private CodeBankBCRepository codeBankBCRepository;
-
-    @Autowired
-    private FileContentTPRepository fileContentTPRepository;
+    private static final Logger logger = LoggerFactory.getLogger(BatchHistoryOrchestratorService.class);
 
     @Autowired
     private JobLauncher jobLauncher;
@@ -42,63 +33,112 @@ public class BatchHistoryOrchestratorService {
     @Autowired
     private Job importFileJob;
 
-    private final Gson gson = new Gson();
+    @Autowired
+    private BatchesHistoryRepository batchesHistoryRepository;
 
-    @PutMapping("addFileTP")
-    public ResponseEntity<?> addFileTP(@RequestBody AddFileRequest addFileRequest) throws IOException {
-        try {
-            if (!isValidDateFormat(addFileRequest.getFileDate())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(gson.toJson("please verify that format date is YYYY-MM-dd"));
-            }
+    @Autowired
+    private BatchHistoryWebSocketHandler webSocketHandler;
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate localDate = LocalDate.parse(addFileRequest.getFileDate(), formatter);
-            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyMMdd");
-            String ordinalDateString = localDate.format(outputFormatter);
-            String fileName = addFileRequest.getFilePath() + "/" + addFileRequest.getFileName() + ordinalDateString + ".txt";
+    public ResponseEntity<?> processBatchHistories(List<Long> batchHIds) throws Exception {
+        if (batchHIds == null || batchHIds.isEmpty()) {
+            return ResponseEntity.badRequest().body("At least one batch history ID is required");
+        }
 
-            if (!(fileSummaryTRepository.findByFileNameAndFileDate(addFileRequest.getFileName(), addFileRequest.getFileDate()).isPresent())) {
-                FileHeaderT f = new FileHeaderT();
-                f.setFileName(addFileRequest.getFileName());
-                f.setFileDate(ordinalDateString);
-                f.setFileprocessingDate(LocalDate.now().format(formatter));
-                f.setDestinationBankIdentification(codeBankBCRepository.findAll().get(0).getIdentifiant());
-                f = fileSummaryTRepository.save(f);
-                int idHeader = f.getId();
+        List<Map<String, Object>> results = new ArrayList<>();
 
-                if (Files.exists(Paths.get(fileName))) {
-                    // Launch Spring Batch job
-                    JobParameters params = new JobParametersBuilder()
-                            .addString("filePath", fileName)
-                            .addString("idHeader", String.valueOf(idHeader))
-                            .addLong("time", System.currentTimeMillis())
-                            .toJobParameters();
-                    jobLauncher.run(importFileJob, params);
+        for (Long batchHId : batchHIds) {
+            try {
+                BatchesHistory history = batchesHistoryRepository.findById(batchHId)
+                        .orElseThrow(() -> new IllegalArgumentException("BatchesHistory not found with ID: " + batchHId));
 
-                    // Get size
-                    long size = fileContentTPRepository.count();
+                // Set status to 0 (parsing started)
+                history.setStatus(0);
+                batchesHistoryRepository.save(history);
+                webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
+                    history.getBatchHId(), 0, history.getBatchName()));
 
-                    return ResponseEntity.ok().body(gson.toJson(size));
-                } else {
-                    return ResponseEntity.badRequest().body(gson.toJson("file not found"));
+                String filePath = Paths.get(history.getFileLocation(), history.getFilename()).toString();
+                java.io.File file = new java.io.File(filePath);
+                if (!file.exists() || !file.isFile()) {
+                    // Set status to 2 (error)
+                    history.setStatus(2);
+                    batchesHistoryRepository.save(history);
+                    webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
+                        history.getBatchHId(), 2, history.getBatchName()));
+
+                    Map<String, Object> errorMap = new HashMap<>();
+                    errorMap.put("batchHId", batchHId);
+                    errorMap.put("status", "error");
+                    errorMap.put("message", "File does not exist or is not a valid file at " + filePath);
+                    results.add(errorMap);
+                    continue;
                 }
-            } else {
-                return ResponseEntity.badRequest().body(gson.toJson("file already processed"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(gson.toJson("Errors while processing file"));
-        }
-    }
 
-    private boolean isValidDateFormat(String date) {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            LocalDate.parse(date, formatter);
-            return true;
-        } catch (Exception e) {
-            return false;
+                JobParameters params = new JobParametersBuilder()
+                        .addString("filePath", filePath)
+                        .addString("idHeader", batchHId.toString())
+                        .addLong("time", System.currentTimeMillis())
+                        .toJobParameters();
+
+                JobExecution execution = jobLauncher.run(importFileJob, params);
+
+                // Wait for completion
+                while (execution.isRunning()) {
+                    Thread.sleep(100);
+                }
+
+                if (execution.getStatus().isUnsuccessful()) {
+                    // Set status to 2 (error)
+                    history.setStatus(2);
+                    batchesHistoryRepository.save(history);
+                    webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
+                        history.getBatchHId(), 2, history.getBatchName()));
+
+                    Map<String, Object> errorMap = new HashMap<>();
+                    errorMap.put("batchHId", batchHId);
+                    errorMap.put("status", "error");
+                    errorMap.put("message", "Batch job failed: " + execution.getStatus());
+                    results.add(errorMap);
+                } else {
+                    // Set status to 3 (parsing completed)
+                    history.setStatus(3);
+                    batchesHistoryRepository.save(history);
+                    webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
+                        history.getBatchHId(), 3, history.getBatchName()));
+
+                    Map<String, Object> successMap = new HashMap<>();
+                    successMap.put("batchHId", batchHId);
+                    successMap.put("status", "success");
+                    successMap.put("message", "File processed successfully");
+                    results.add(successMap);
+                }
+            } catch (Exception e) {
+                logger.error("Error processing batch history ID {}: {}", batchHId, e.getMessage());
+                // Try to set status to 2 (error) - may fail if DB connection is down
+                try {
+                    BatchesHistory history = batchesHistoryRepository.findById(batchHId).orElse(null);
+                    if (history != null) {
+                        history.setStatus(2);
+                        batchesHistoryRepository.save(history);
+                        webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
+                            history.getBatchHId(), 2, history.getBatchName()));
+                    }
+                } catch (Exception dbError) {
+                    logger.error("Failed to update error status for batch history ID {} (DB may be unavailable): {}",
+                        batchHId, dbError.getMessage());
+                    // Still broadcast error via WebSocket even if DB update failed
+                    webSocketHandler.broadcastStatusUpdate(new BatchStatusUpdateMessage(
+                        batchHId, 2, "Unknown"));
+                }
+
+                Map<String, Object> errorMap = new HashMap<>();
+                errorMap.put("batchHId", batchHId);
+                errorMap.put("status", "error");
+                errorMap.put("message", e.getMessage());
+                results.add(errorMap);
+            }
         }
+
+        return ResponseEntity.ok(results);
     }
 }

@@ -1,21 +1,15 @@
 package com.mss.unified.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "TP_DETAIL_TP", schema = "FRANSABANK")
+@Table(name = "PARSEDTP", schema = "FRANSABANK")
 public class FileContentTP {
-    @Id
+@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "newFILECONTENTTPSequence")
     @SequenceGenerator(name = "newFILECONTENTTPSequence", sequenceName = "FRANSABANK.FILECONTENTTPns", allocationSize = 1)
     @Column(name = "ID", nullable = false)
@@ -102,8 +96,10 @@ public class FileContentTP {
     private String idOriginTransaction;
     @Column(name = "rufpaiement")
     private String rufpaiement;
-    @Column(name = "IDHEADER")
-    private String idHeder;
+  @ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "BATCH_H_ID", nullable = false)
+@JsonIgnore
+private BatchesHistory batchHistory;
 
     private String idChargeback;
     private String codeMotifChargeback;
@@ -457,13 +453,8 @@ public class FileContentTP {
         this.rufpaiement = rufpaiement;
     }
 
-    public String getIdHeder() {
-        return idHeder;
-    }
 
-    public void setIdHeder(String idHeder) {
-        this.idHeder = idHeder;
-    }
+
 
     public String getIdChargeback() {
         return idChargeback;
@@ -561,6 +552,14 @@ public class FileContentTP {
         this.status = status;
     }
 
+    public BatchesHistory getBatchHistory() {
+        return batchHistory;
+    }
+
+    public void setBatchHistory(BatchesHistory batchHistory) {
+        this.batchHistory = batchHistory;
+    }
+
     @Override
     public String toString() {
         return "FileContentTP [id=" + id + ", codeDebit=" + codeDebit + ", codeBin=" + codeBin + ", codeBank=" + codeBank
@@ -579,7 +578,6 @@ public class FileContentTP {
                 + terminalVerificationResult + ", libelleCommercant=" + libelleCommercant + ", ruf=" + ruf
                 + ", Numtransaction=" + Numtransaction + ", udf1=" + udf1 + ", rufAcquereur=" + rufAcquereur
                 + ", numTransactionPaiementInternet=" + numTransactionPaiementInternet + ", trackId=" + trackId
-                + ", idOriginTransaction=" + idOriginTransaction + ", rufpaiement=" + rufpaiement + ", idHeder="
-                + idHeder + ", status=" + status + "]";
+                + ", idOriginTransaction=" + idOriginTransaction + ", rufpaiement=" + rufpaiement + ", status=" + status + "]";
     }
 }

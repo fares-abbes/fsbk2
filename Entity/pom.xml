@@ -9,7 +9,7 @@
    </parent>
    <groupId>com.mss</groupId>
    <artifactId>unified</artifactId>
-   <version>1.0.0</version>
+   <version>1.0.2</version>
    <packaging>jar</packaging>
    <name>cms</name>
    <description>united cms </description>

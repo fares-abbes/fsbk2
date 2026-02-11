@@ -2,9 +2,13 @@ package com.mss.unified.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "BATCHES_HISTORY", schema = "FRANSABANK")
@@ -12,12 +16,7 @@ import java.util.Date;
 public class BatchesHistory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "batchHistorySeq")
-    @SequenceGenerator(
-            name = "batchHistorySeq",
-            sequenceName = "FRANSABANK.BATCHES_HISTORY_SEQ",
-            allocationSize = 1
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BATCH_H_ID", nullable = false)
     private Long batchHId;
 
@@ -41,6 +40,9 @@ public class BatchesHistory {
 
     @Column(name = "FILE_LOCATION")
     private String fileLocation;
+
+    @Column(name = "FILENAME")
+    private String filename;
 
     /* ========================
        Execution-specific data
@@ -75,7 +77,11 @@ public class BatchesHistory {
     @Column(name = "BYPASS_STATUS")
     private Integer bypassStatus;
 
-   
+   @OneToMany(mappedBy = "batchHistory", fetch = FetchType.LAZY)
+   @OnDelete(action = OnDeleteAction.CASCADE)
+   @JsonIgnore
+   private List<FileContentTP> transactions = new ArrayList<>();
+
 
   
   
@@ -127,6 +133,14 @@ public class BatchesHistory {
 
     public void setFileLocation(String fileLocation) {
         this.fileLocation = fileLocation;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public Date getBatchHStartDate() {

@@ -1,6 +1,7 @@
 package com.mss.unified.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -89,7 +90,26 @@ public interface BatchesHistoryRepository extends JpaRepository<BatchesHistory, 
     List<BatchesHistory> findByBatchNameAndBatchDateGreaterThan(String batchName, java.util.Date startDate);
 
     /**
+     * Find distinct batch_name values
+     */
+    @Query("SELECT DISTINCT bh.batchName FROM BatchesHistory bh WHERE bh.batchName IS NOT NULL")
+    List<String> findDistinctBatchName();
+
+    /**
+     * Find pending batches for a specific batch_name with batch date after start date and status != specified status
+     */
+    @Query("SELECT bh FROM BatchesHistory bh WHERE bh.batchName = :batchName AND bh.batchDate > :startDate AND bh.status != :status ORDER BY bh.batchDate ASC")
+    List<BatchesHistory> findByBatchNameAndBatchDateAfterAndStatusNot(String batchName, java.util.Date startDate, Integer status);
+
+    /**
      * Find history record by key
      */
     Optional<BatchesHistory> findByKeyfc(String keyfc);
+
+    /**
+     * Update status of a batch history record by ID
+     */
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE BatchesHistory bh SET bh.status = :status WHERE bh.batchHId = :id")
+    int updateStatusById(Integer status, Long id);
 }

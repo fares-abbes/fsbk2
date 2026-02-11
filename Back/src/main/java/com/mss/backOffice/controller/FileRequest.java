@@ -412,7 +412,7 @@ public class FileRequest {
 
 	}
 
-	@PutMapping("addFileTP")
+	@PutMapping("	addFileTP")
 	public ResponseEntity<?> addFileTP(@RequestBody AddFileRequest addFileRequest) throws IOException {
 		BatchesFC batch = batchesFFCRepository.findByBatchType("Integration").get(0);
 

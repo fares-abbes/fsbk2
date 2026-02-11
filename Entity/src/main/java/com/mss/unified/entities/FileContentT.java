@@ -14,6 +14,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "TP_DETAIL_T",schema = "FRANSABANK")
+
 public class FileContentT {
     @Id
 @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "newFILECONTENTTSequence")

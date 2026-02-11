@@ -25,11 +25,6 @@
 
 	<dependencies>
 		<!-- Entity dependency -->
-		<dependency>
-			<groupId>sparkJar</groupId>
-			<artifactId>sparkJar</artifactId>
-			<version>1.0</version>
-		</dependency>
 	<dependency>
         <groupId>com.github.ulisesbocchio</groupId>
         <artifactId>jasypt-spring-boot-starter</artifactId>
@@ -57,13 +52,14 @@
 			<version>1.8.3</version>
 		</dependency>
 		<dependency>
-			<groupId>sparkJar</groupId>
-			<artifactId>sparkJar</artifactId>
-			<version>1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>mssql-jdbc</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -171,6 +167,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
 				<exclusion>
@@ -252,9 +252,14 @@
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.mss</groupId>
+			<artifactId>unified</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.5.12</version>
+			<version>1.5.10</version>
 		</dependency>
      </dependencies>
 

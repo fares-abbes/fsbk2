@@ -3,6 +3,7 @@ package com.mss.backOffice;
 
 
 import com.mss.backOffice.config.*;
+import com.mss.backOffice.config.WebSocketConfig;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 
 import org.springframework.boot.SpringApplication;
@@ -29,7 +30,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Import({ AuditingConfig.class, DatasourceConfig.class , IFA_TTTTLLLNUM.class, InterceptorAppConfig.class,
 		LoggingFilter.class, PayloadLogFilter.class,PBKDF2Hasher.class,
 SchedulerConfig.class,  ServiceInterceptor.class,
-TTTTDecimalTagMapper.class, WebConfig.class}) //les classes de configurations
+TTTTDecimalTagMapper.class, WebConfig.class, WebSocketConfig.class}) //les classes de configurations
 public class BackOfficeApplication extends SpringBootServletInitializer {
 	public static boolean occupied=false;
 	public static boolean occupiedEv=false;

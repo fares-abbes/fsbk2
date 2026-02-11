@@ -105,6 +105,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/BatchHistory/**").permitAll()//
                 .antMatchers("/batchExec/**").permitAll()//
                 .antMatchers("/addFileTP").permitAll()//
+                .antMatchers("/ws/**").permitAll()// Allow WebSocket connections
                 //.antMatchers("/executorThreadUAP051INFileBC/buildControlTp").permitAll()//
              //   .antMatchers("/FileRequest/croControl").permitAll()//
                 .anyRequest().authenticated().and().headers().addHeaderWriter(new StaticHeadersWriter("Server","server")).and().headers().frameOptions().sameOrigin()

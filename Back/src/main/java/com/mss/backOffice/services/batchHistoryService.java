@@ -1,5 +1,6 @@
 package com.mss.backOffice.services;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,8 @@ import com.mss.unified.entities.BatchesFC;
 import com.mss.unified.entities.BatchesHistory;
 import com.mss.unified.repositories.BatchesFFCRepository;
 import com.mss.unified.repositories.BatchesHistoryRepository;
+import com.mss.backOffice.websocket.BatchHistoryWebSocketHandler;
+import com.mss.backOffice.websocket.BatchStatusUpdateMessage;
 
 /**
  * Service for managing BatchesHistory records.
@@ -29,6 +32,9 @@ public class batchHistoryService {
     @Autowired
     private BatchesHistoryRepository batchesHistoryRepository;
 
+    @Autowired
+    private BatchHistoryWebSocketHandler webSocketHandler;
+
     @Transactional
     public void syncBatchByKey(String key) {
         batchesHistoryRepository.findByKeyfc(key).ifPresent(history -> {
@@ -36,6 +42,14 @@ public class batchHistoryService {
             history.setBatchHEndDate(new Date());
             batchesHistoryRepository.save(history);
             logger.info("Manually synced batch history with key: {}", key);
+
+            // Broadcast status update via WebSocket
+            BatchStatusUpdateMessage message = new BatchStatusUpdateMessage(
+                history.getBatchHId(),
+                1,
+                history.getBatchName()
+            );
+            webSocketHandler.broadcastStatusUpdate(message);
         });
     }
 
@@ -72,37 +86,38 @@ public class batchHistoryService {
         });
     }
     /**
-     * Returns the list of BatchesFC from the last done batch (batchStatus=1)
-     * up to yesterday (excluding today's batches).
+     * Returns the list of BatchesHistory that are pending or failed since the last successful execution for each batchName.
      * Logic:
-     * 1. Find the last batch in BatchesFC where batchStatus = 1 (done)
-     * 2. Get all batches where batchLastExecution is AFTER that batch's batchLastExecution
-     * 3. Exclude batches from today (only include up to yesterday)
+     * 1. Get all distinct batchName values
+     * 2. For each batchName, find the last successful execution by batchDate
+     * 3. Find pending batches (status != 1) for that batchName after the last successful execution
+     * 4. Aggregate all pending batches across all batchName
      */
-    public List<BatchesFC> getPendingBatchesSinceLastDone() {
-        // Step 1: Find the last done batch (batchStatus = 1) from BatchesFC table
-        List<BatchesFC> doneBatches = batchesFCRepository.findLastDoneBatch();
-        
-        Date startDate;
-        if (doneBatches != null && !doneBatches.isEmpty()) {
-            // Get the first one (most recent done batch by batchLastExecution)
-            BatchesFC lastDoneBatch = doneBatches.get(0);
-            startDate = lastDoneBatch.getBatchLastExcution();
-        } else {
-            // If no done batch found, start from the earliest possible
-            startDate = new Date(0);
+    public List<BatchesHistory> getPendingBatchesSinceLastDone() {
+        // Get all distinct batchName values
+        List<String> distinctBatchNames = batchesHistoryRepository.findDistinctBatchName();
+
+        List<BatchesHistory> pendingBatches = new ArrayList<>();
+
+        for (String batchName : distinctBatchNames) {
+            // Find the last done history for this batchName
+            List<BatchesHistory> doneHistories = batchesHistoryRepository.findTopByBatchNameAndStatusOrderByBatchDateDesc(batchName, 1);
+
+            Date startDate;
+            if (doneHistories != null && !doneHistories.isEmpty()) {
+                BatchesHistory lastDoneHistory = doneHistories.get(0);
+                startDate = lastDoneHistory.getBatchDate();
+            } else {
+                // If no done history found, start from the earliest possible
+                startDate = new Date(0);
+            }
+
+            // Get pending batches for this batchName after the last done
+            List<BatchesHistory> pendings = batchesHistoryRepository.findByBatchNameAndBatchDateAfterAndStatusNot(batchName, startDate, 1);
+            pendingBatches.addAll(pendings);
         }
 
-        // Step 2: Calculate start of today (midnight)
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date startOfToday = calendar.getTime();
-
-        // Step 3: Get all batches after the last done batch but before today
-        return batchesFCRepository.findBatchesAfterDateUntilYesterday(startDate, startOfToday);
+        return pendingBatches;
     }
 
     /**
@@ -128,5 +143,26 @@ public class batchHistoryService {
 
         // Step 2: Get all BatchesHistory for this batchName after the last done history and status != 1
         return batchesHistoryRepository.findByBatchNameAndBatchDateGreaterThan(batchName, startDate);
+    }
+
+    /**
+     * Update status for a history record
+     */
+    @Transactional
+    public void updateStatus(Long historyId, Integer status) {
+        batchesHistoryRepository.findById(historyId).ifPresent(history -> {
+            history.setStatus(status);
+            batchesHistoryRepository.save(history);
+            logger.info("Updated status to {} for batch history ID: {}", status, historyId);
+
+            // Broadcast status update via WebSocket
+            BatchStatusUpdateMessage message = new BatchStatusUpdateMessage(
+                history.getBatchHId(),
+                status,
+                history.getBatchName()
+            );
+            logger.info("Broadcasting to {} active WebSocket sessions", webSocketHandler.getActiveSessionCount());
+            webSocketHandler.broadcastStatusUpdate(message);
+        });
     }
 }
